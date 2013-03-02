@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Longminder">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="JEE_utils.jar" deploy-path="/lib" handle="module:/resource/JEE_utils/JEE_utils">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="LongminderWAR.war" deploy-path="/" handle="module:/resource/LongminderWAR/LongminderWAR">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="LongminderEJB.jar" deploy-path="/" handle="module:/resource/LongminderEJB/LongminderEJB">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="LongminderEJBClient.jar" deploy-path="/" handle="module:/resource/LongminderEJBClient/LongminderEJBClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
