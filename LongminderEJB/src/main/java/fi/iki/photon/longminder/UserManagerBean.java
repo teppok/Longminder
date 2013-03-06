@@ -248,7 +248,7 @@ public class UserManagerBean implements UserManager, Serializable {
 	 * Allows modification of password only if the supplied oldPassword is the same 
 	 * as the current password. 
 	 * 
-	 * @return false if passwords don't match.
+	 * @return false if passwords don't match or an error happens.
 	 */
 	
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -256,6 +256,9 @@ public class UserManagerBean implements UserManager, Serializable {
 	public boolean updateUser(String email, UserDTO ud) {
     	if (ud == null || email == null) return false;
 
+    	User tmpUser = findTrueUserForEmail(ud.getEmail());
+    	if (tmpUser != null) return false;
+    	
     	User u = findTrueUserForEmail(email);
 
 		if (u == null) return false;
@@ -276,13 +279,13 @@ public class UserManagerBean implements UserManager, Serializable {
 		return true;
 	}
 
-    /** Given an UserDTO object containing only a valid Email, fills it with data from
+    /** Given an email and a possibly empty UserDTO object, fills it with data from
      * the database.
      */
     
 	@Override
-	public void fill(UserDTO ud) {
-		User u = findTrueUserForEmail(ud.getEmail());
+	public void fill(String email, UserDTO ud) {
+		User u = findTrueUserForEmail(email);
 
 		if (u != null) {
 			u.initializeDTO(ud);

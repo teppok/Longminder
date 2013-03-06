@@ -51,7 +51,7 @@ public class EmailManagerBean implements EmailManager, Serializable {
     /** Sends a verification email to the email specified in UserDTO. */
     
 	@Override
-	public void sendVerificationEmail(String serverBase, String email) {
+	public boolean sendVerificationEmail(String serverBase, String email) {
 		try {
 			User u = um.findTrueUserForEmail(email);
 			um.createLogin(u);
@@ -74,8 +74,9 @@ public class EmailManagerBean implements EmailManager, Serializable {
 			
 		} catch (MessagingException e) {
 			e.printStackTrace();
+			return false;
 		}
-		
+		return true;
 	}
 
 	/** Sends emails for all users in the database whose email has been verified. */

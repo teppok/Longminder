@@ -69,6 +69,7 @@ public class AlertManagerBean implements AlertManager, Serializable {
     /** Given an AlertDTO with a valid Id field, updates the corresponding database object
      * values based on the supplied AlertDTO. Update logic is in Alert.initialize (currently
      * overwrites values, nulls cause exception).
+     * Also sets fired and dismissed statuses to false.
      */
     
 //    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -78,6 +79,8 @@ public class AlertManagerBean implements AlertManager, Serializable {
     	
     	if (a != null) {
     		a.initialize(modify);
+    		a.setFired(false);
+    		a.setDismissed(false);
     	}
 	}
 
