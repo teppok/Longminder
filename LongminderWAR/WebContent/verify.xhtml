@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+<ui:composition template="./template.xhtml">
+
+<ui:define name="head">
+	<f:metadata>
+		<f:event listener="#{loginDTO.checkLogin}" type="preRenderView" />
+		<f:event listener="#{loginDTO.verify}" type="preRenderView" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="body">
+
+<h:outputText value="Your email address has been verified." rendered="#{loginDTO.verified}" /><br />
+
+<h:outputText value="Email address verification fail. Either the address was copied incorrectly or the temporary key has been expired." rendered="#{! loginDTO.verified}" /><br />
+
+<h:form>
+	<h:commandLink action="mainpage" value="Return to main page" />
+</h:form>
+</ui:define>
+</ui:composition>
+</h:body>
+</html>

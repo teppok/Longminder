@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:ez="http://java.sun.com/jsf/composite/lmlib"
+xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+<ui:composition template="./template.xhtml">
+
+<ui:define name="head">
+	<f:metadata>
+		<f:event listener="#{loginDTO.checkLogin}" type="preRenderView" />
+	</f:metadata>
+<script>
+function changeRepeat() {
+	
+	if (document.getElementById("panel:myform:repeatType:0").checked) {
+		document.getElementById('repeat_common').style.display = 'none';
+		document.getElementById('repeat1').style.display = 'none';
+		document.getElementById('repeat2').style.display = 'none';
+	}
+	if (document.getElementById("panel:myform:repeatType:1").checked) {
+		document.getElementById('repeat_common').style.display = 'block';
+		document.getElementById('repeat1').style.display = 'block';
+		document.getElementById('repeat2').style.display = 'none';
+	}
+	if (document.getElementById("panel:myform:repeatType:2").checked) {
+		document.getElementById('repeat_common').style.display = 'block';
+		document.getElementById('repeat1').style.display = 'none';
+		document.getElementById('repeat2').style.display = 'block';
+	}
+}
+</script>
+</ui:define>
+
+<ui:define name="body">
+<ez:AlertPanel alertTarget="#{newAlert}" action="#{newAlert.create}" actionLabel="Create" id="panel">
+</ez:AlertPanel>
+<h:form>
+<h:commandButton action="mainpage" value="Back" />
+</h:form>
+</ui:define>
+</ui:composition>
+</h:body>
+</html>

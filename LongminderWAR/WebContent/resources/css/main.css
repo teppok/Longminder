@@ -1,0 +1,62 @@
+
+
+body {
+	background-color: #D5D5FF;
+}
+
+.mainarea {
+	font-family: sans-serif;
+	margin-left: 50px;  
+	width: 600px;
+}
+
+.loginarea {
+	text-align: right;
+}
+
+.smalllink {
+	font-size: 80%;
+}
+
+.listheader1 {
+	width: 200px;
+	max-width: 200px;
+	border: 1px solid black;
+}
+
+.listheader2, .listheader3, .listheader4, .listheader5, .listheader6 {
+	width: 100px;
+	max-width: 100px;
+	border: 1px solid black;
+}
+
+.listcolumn1 {
+	text-align: left;
+	border: 1px solid black;
+}  
+
+.listcolumn2, .listcolumn3, .listcolumn4, .listcolumn5, .listcolumn6 {
+	text-align: center;
+	border: 1px solid black;
+}
+
+.alert-table {
+	border-collapse: collapse;
+}
+
+.lightbox {
+	border: 1px solid;
+	border-color: #AFAFAF;
+	padding: 10px;
+	margin: 5px;
+}
+
+.leftcolumn {
+	width: 200px;
+}
+
+.maininner {
+	border: 1px solid;
+	padding: 10px; 
+	background-color: #FFFFFF;
+}

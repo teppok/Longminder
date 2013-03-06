@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core">
+
+
+<h:body>
+
+<ui:composition template="./template.xhtml">
+
+<ui:define name="head">
+	<f:metadata>
+		<f:event listener="#{loginDTO.checkLogin}" type="preRenderView" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="body">
+Alert history 
+<h:link outcome="mainpage" class="smalllink" value="View upcoming alerts" /><br />
+<h:form>
+<h:dataTable id="alerts" captionStyle="font-weight:bold" columnClasses="listcolumn1, listcolumn2, listcolumn3, listcolumn4, listcolumn5, listcolumn6" headerClass="list-header" summary="Alerts"
+   value="#{alertList.history}" border="0" var="item" styleClass="alert-table">
+<h:column headerClass="listheader1">
+	<f:facet name="header">
+		<h:outputText value="Description" />
+	</f:facet>
+	<h:link value="#{item.description}" outcome="modifyalert">
+		<f:param name="alertid" value="#{item.id}" />
+	</h:link>
+</h:column>
+<h:column headerClass="listheader2">
+	<f:facet name="header">
+		<h:outputText value="Alert date" />
+	</f:facet>
+	<h:outputText value="#{item.nextAlert}">
+      <f:convertDateTime pattern="dd.MM.yyyy" />
+	</h:outputText>
+</h:column>
+<h:column headerClass="listheader3">
+	<f:facet name="header">
+		<h:outputText value="Repeat" />
+	</f:facet>
+	<h:outputText value="*" rendered="#{item.repeatType > 0}"/>
+</h:column>
+<h:column headerClass="listheader4">
+	<f:facet name="header">
+		<h:outputText value="Persistent" />
+	</f:facet>
+	<h:panelGroup rendered="#{!item.oneOff}">
+	<h:outputText value="Yes" rendered="#{(item.dismissed)}" />
+	<h:commandLink value="Dismiss" action="#{alertList.dismiss(item.id)}" rendered="#{!item.dismissed}" />
+	</h:panelGroup>
+</h:column>
+<h:column headerClass="listheader5">
+	<f:facet name="header">
+		<h:outputText value="Delete" />
+	</f:facet>
+	<h:commandLink value="X" action="#{alertList.deleteAlert(item.id)}" />
+</h:column>
+</h:dataTable>
+</h:form>
+</ui:define>
+</ui:composition>
+</h:body>
+</html>

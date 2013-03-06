@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13613623576000" configfile="/LongminderWAR/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf13625254250587" outlinks="pf13625254250588" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" id="pf13625254250599" referenceLink="//@navigationRule.4/@navigationCase.0/@toViewId|" outlinks="pf136252542505910 pf136252542505911" inlinks="pf13625254250588 pf136252542505912 pf136252542505913 pf136252542505914" path="/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="register.xhtml" id="pf136252542505915" referenceLink="//@navigationRule.4/@fromViewId|" outlinks="pf136252542505914 pf136252542505916" inlinks="pf136252542505910" path="/register.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="mainpage.xhtml" id="pf136252542505917" referenceLink="//@navigationRule.7/@navigationCase.0/@toViewId|" outlinks="pf136252542505912 pf136252542505918 pf136252542505919 pf136252542505920 pf136252542505921" inlinks="pf136252542505911 pf136252542505922 pf136252542505916 pf136252542505923 pf136252542505924 pf136252542505925" path="/mainpage.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="newalert.xhtml" id="pf136252542505926" referenceLink="//@navigationRule.6/@fromViewId|" outlinks="pf136252542505924 pf136252542505927" inlinks="pf136252542505918 pf136252542505928" path="/newalert.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="modifyalert.xhtml" id="pf136252542505929" referenceLink="//@navigationRule.7/@fromViewId|" outlinks="pf136252542505925 pf136252542505930" inlinks="pf136252542505919 pf136252542505931" path="/modifyalert.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="profile.xhtml" id="pf136252542505932" referenceLink="//@navigationRule.7/@navigationCase.1/@toViewId|" outlinks="pf136252542505923 pf136252542505933" inlinks="pf136252542505920 pf136252542505934 pf136252542505933 pf136252542505927 pf136252542505930" path="/profile.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="history.xhtml" id="pf136252542505935" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf136252542505913 pf136252542505928 pf136252542505931 pf136252542505934 pf136252542505922" inlinks="pf136252542505921" path="/history.xhtml"/>
+  <links id="pf13625254250588" target="pf13625254250599" source="pf13625254250587" outcome="login" redirect="true"/>
+  <links id="pf136252542505910" target="pf136252542505915" source="pf13625254250599" outcome="register" redirect="true"/>
+  <links id="pf136252542505911" target="pf136252542505917" source="pf13625254250599" outcome="mainpage" redirect="true"/>
+  <links id="pf136252542505912" target="pf13625254250599" source="pf136252542505917" outcome="login" redirect="true"/>
+  <links id="pf136252542505918" target="pf136252542505926" source="pf136252542505917" outcome="newalert" redirect="true"/>
+  <links id="pf136252542505919" target="pf136252542505929" source="pf136252542505917" outcome="modifyalert" redirect="true"/>
+  <links id="pf136252542505920" target="pf136252542505932" source="pf136252542505917" outcome="profile" redirect="true"/>
+  <links id="pf136252542505921" target="pf136252542505935" source="pf136252542505917" outcome="history" redirect="true"/>
+  <links id="pf136252542505913" target="pf13625254250599" source="pf136252542505935" outcome="login" redirect="true"/>
+  <links id="pf136252542505928" target="pf136252542505926" source="pf136252542505935" outcome="newalert" redirect="true"/>
+  <links id="pf136252542505931" target="pf136252542505929" source="pf136252542505935" outcome="modifyalert" redirect="true"/>
+  <links id="pf136252542505934" target="pf136252542505932" source="pf136252542505935" outcome="profile" redirect="true"/>
+  <links id="pf136252542505922" target="pf136252542505917" source="pf136252542505935" outcome="mainpage" redirect="true"/>
+  <links id="pf136252542505914" target="pf13625254250599" source="pf136252542505915" outcome="login" redirect="true"/>
+  <links id="pf136252542505916" target="pf136252542505917" source="pf136252542505915" outcome="mainpage" redirect="true"/>
+  <links id="pf136252542505923" target="pf136252542505917" source="pf136252542505932" outcome="mainpage" redirect="true"/>
+  <links id="pf136252542505933" target="pf136252542505932" source="pf136252542505932" outcome="profile" redirect="true"/>
+  <links id="pf136252542505924" target="pf136252542505917" source="pf136252542505926" outcome="mainpage" redirect="true"/>
+  <links id="pf136252542505927" target="pf136252542505932" source="pf136252542505926" outcome="profile" redirect="true"/>
+  <links id="pf136252542505925" target="pf136252542505917" source="pf136252542505929" outcome="mainpage" redirect="true"/>
+  <links id="pf136252542505930" target="pf136252542505932" source="pf136252542505929" outcome="profile" redirect="true"/>
+</pageflow:Pageflow>

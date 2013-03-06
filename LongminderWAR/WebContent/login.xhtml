@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+<ui:composition template="./template.xhtml">
+
+<ui:define name="head">
+	<f:view beforePhase="#{loginDTO.checkLoginOnLogin}" />
+</ui:define>
+
+<ui:define name="body">
+When was the time for the next dentist checkup? What calendar did I write it again?
+<p>Longminder is a tool for long term reminders. Set an alert for some faraway point in the future and
+when the time comes, you will get a friendly email reminder. Based on the settings you decide, you may
+have to log on to the service and dismiss the alert, or it will be sent again a few days later.</p>
+<h:outputText value="Apart from the emails concerning the service status, you will only be sent email based on the settings
+you decide yourself." /><br />
+<p>Some ideas:</p>
+<ul><li>Biweekly reminder to start reading the book you have sitting on your shelf.</li>
+<li>Reminder to rotate your bed mattress every 3 months.</li>
+<li>Reminder every month to pay your recurring bills.</li>
+<li>Yearly reminder to revise your long term investment strategy.</li>
+<li>Yearly reminder for medical checkups.</li>
+</ul>
+<p>Sign up and try!</p>
+
+<h:outputText value="NB: This service is still a proof of concept and technical demo, so there is no guarantee that the
+service is still up when your reminder would be sent. However, if the service has to be cancelled after it has entered beta stage,
+all users will be sent an email about their alerts."></h:outputText><br />
+<h:outputText value="NB2: The service is still in alpha stage, so it may have bugs and alerts may have to be cleared without warning" /><br />
+
+<h:form>
+<h:panelGrid columns="2">
+<h:outputLabel for="email" value="Email" />
+<h:inputText id="email" value="#{loginDTO.email}" />
+<h:outputLabel for="password" value="Password" />
+<h:inputSecret id="password" value="#{loginDTO.password}" />
+<h:commandButton value="#{bundle.login}" action="#{loginDTO.login}" />
+<h:commandLink id="register" action="register" value="#{bundle.register}" />
+</h:panelGrid>
+<h:message for="register" />
+</h:form>
+
+</ui:define>
+
+</ui:composition>
+</h:body>
+</html>

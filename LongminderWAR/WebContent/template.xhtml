@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+<h:outputStylesheet library="css" name="main.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title><ui:insert name="title">Longminder</ui:insert></title>
+<ui:insert name="head" />
+</h:head>
+<h:body>
+    <div id="image">
+      <h:graphicImage value="#{resource['longminder.png']}" />
+    </div>
+	<div class="mainarea">
+		<div class="loginarea">
+			<h:form>
+				<h:panelGroup rendered="#{loginDTO.authorized}">
+				<h:outputText value="Logged in as " />
+				<h:link outcome="profile" value="#{loginDTO.email}" />
+				<h:outputText value=". " />
+				<h:commandLink action="#{loginDTO.logout}" value="Logout" class="smalllink"/>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{! loginDTO.authorized}">
+				<h:outputText value="Not logged in." />
+				<h:link outcome="register" value="Sign up" class="smalllink" />
+				</h:panelGroup>
+			</h:form>
+		</div>
+		<div class="maininner">
+			<ui:insert name="body" />
+		</div>
+	</div>
+</h:body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:composite="http://java.sun.com/jsf/composite"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html">
+
+<h:body>
+<composite:interface>
+	<composite:attribute name="alertTarget" />
+	<composite:attribute name="action" method-signature="java.lang.String action()" />
+	<composite:attribute name="actionLabel" />
+</composite:interface>
+
+<composite:implementation>
+<h:form id="myform">
+<h:panelGroup layout="block" class="lightbox">
+<h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
+<h:outputLabel value="Description" />
+<h:inputText value="#{cc.attrs.alertTarget.description}" required="true" requiredMessage="Description is required." />
+<h:outputLabel value="Alert Date (dd.mm.yyyy)" />
+<h:inputText value="#{cc.attrs.alertTarget.nextAlert}">
+  <f:convertDateTime pattern="dd.MM.yyyy" />
+</h:inputText>
+</h:panelGrid>
+<h:outputText value="(You can leave the date empty if you set a repeat - the repeat interval will be used)" />
+</h:panelGroup>
+
+<h:panelGroup layout="block" class="lightbox">
+<h:selectOneRadio id="oneOffInt" required="true" value="#{cc.attrs.alertTarget.oneOffInt}">
+  <f:selectItem itemValue="1" itemLabel="One-off alert" />
+  <f:selectItem itemValue="2" itemLabel="Persistent alert" />
+</h:selectOneRadio>
+<h:outputText value="(Persistent alert will go off every couple of days until you log in and dismiss the alert.)" /><br />
+<h:outputText value="NOTE: Currently email sending limits are not in effect for testing purposes so persistent alerts will go off every minute." />
+</h:panelGroup>
+
+<h:panelGroup layout="block" class="lightbox">
+<h:selectOneRadio id="repeatType" required="true" value="#{cc.attrs.alertTarget.repeatType}" onchange="changeRepeat();">
+	<f:selectItem itemValue="0" itemLabel="No repeat" />
+	<f:selectItem itemValue="1" itemLabel="Day based repeat" />
+	<f:selectItem itemValue="2" itemLabel="Week based repeat" />
+</h:selectOneRadio>
+
+<div id="repeat1" style='display: ${(cc.attrs.alertTarget.repeatType == 1)?"block":"none"};'>
+<h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
+<h:outputLabel value="Repeat delay (in days)" />
+<h:inputText value="#{cc.attrs.alertTarget.dayDelay}" />
+</h:panelGrid>
+</div>
+<div id="repeat2" style='display: ${(cc.attrs.alertTarget.repeatType == 2)?"block":"none"};'>
+<h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
+<h:outputLabel value="Repeat delay (in weeks)" />
+<h:inputText value="#{cc.attrs.alertTarget.weekDelay}" />
+<h:outputLabel value="Repeat week day" />
+<h:selectOneMenu id="repeatWeekDay" value="#{cc.attrs.alertTarget.alertWeekDay}">
+	<f:selectItem itemValue="0" itemLabel="Monday" />
+	<f:selectItem itemValue="1" itemLabel="Tuesday" />
+	<f:selectItem itemValue="2" itemLabel="Wednesday" />
+	<f:selectItem itemValue="3" itemLabel="Thursday" />
+	<f:selectItem itemValue="4" itemLabel="Friday" />
+	<f:selectItem itemValue="5" itemLabel="Saturday" />
+	<f:selectItem itemValue="6" itemLabel="Sunday" />
+</h:selectOneMenu>
+</h:panelGrid>
+<h:outputText value="(Week changes on Sunday/Monday, alert will be sent on the week the specified number of weeks from now on the specified week day)" />
+</div>
+
+<div id="repeat_common" style='display: ${(cc.attrs.alertTarget.repeatType > 0)?"block":"none"};'>
+<h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
+<h:outputLabel value="Repeat until date" />
+<h:inputText value="#{cc.attrs.alertTarget.repeatUntil}">
+  <f:convertDateTime pattern="dd.MM.yyyy" />
+</h:inputText>
+<h:outputLabel value="Repeat this many times" />
+<h:inputText value="#{cc.attrs.alertTarget.repeatTimes}" />
+</h:panelGrid>
+<h:outputText value="(Repeating stops whenever either constraint is met. Leave both fields empty for a forever repeating alert.)" />
+</div>
+</h:panelGroup>
+
+<h:commandButton value="#{cc.attrs.actionLabel}" action="#{cc.attrs.action}" />
+</h:form>
+</composite:implementation>
+</h:body>
+</html>

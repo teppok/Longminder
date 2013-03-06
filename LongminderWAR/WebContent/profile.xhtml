@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+
+<ui:composition template="./template.xhtml">
+
+<ui:define name="head">
+	<f:metadata>
+		<f:event listener="#{loginDTO.checkLogin}" type="preRenderView" />
+		<f:event listener="#{modifyUser.initialize}" type="preRenderView" />
+	</f:metadata>
+</ui:define>
+
+<ui:define name="body">
+<h2>User info:</h2>
+<h:form>
+<h:inputHidden value="#{modifyUser.id}" />
+<h:panelGroup layout="block" class="lightbox">
+<h:panelGrid columns="2">
+<h:outputLabel value="Email"></h:outputLabel>
+		<h:inputText value="#{modifyUser.email}">
+			<f:validateRegex pattern="^([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)$" />
+		</h:inputText>
+<h:outputLabel value="First name"></h:outputLabel>
+<h:inputText value="#{modifyUser.first}" required="true" requiredMessage="#{bundle['required.first']}" ></h:inputText>
+<h:outputLabel value="Last name"></h:outputLabel>
+<h:inputText value="#{modifyUser.last}" required="true" requiredMessage="#{bundle['required.last']}" ></h:inputText>
+<h:outputLabel value="Old password"></h:outputLabel>
+<h:inputSecret value="#{modifyUser.oldPassword}" />
+<h:outputLabel value="New password"></h:outputLabel>
+<h:inputSecret value="#{modifyUser.password1}" />
+<h:outputLabel value="New password again"></h:outputLabel>
+<h:inputSecret value="#{modifyUser.password2}" />
+</h:panelGrid>
+<h:commandButton action="#{modifyUser.modify}" value="Modify" /><br />
+<h:outputText value="(If you modify your email, a new verification email will be sent)" /><br />
+<h:outputText value="(If you modify your password or email, you must enter the old password.)" /><br />
+</h:panelGroup>
+</h:form>
+<h:form>
+<br />
+<h:panelGroup layout="block" class="lightbox">
+<h:outputLabel value="Email verified"></h:outputLabel>
+<h:outputLabel value='#{modifyUser.verified?"Yes":"No"}' /><br />
+<h:panelGroup rendered="#{! modifyUser.verified}">
+<h:commandButton action="#{modifyUser.resend}" value="Resend verification email" /><br />
+<h:outputText value="(Sends the verification to #{modifyUser.email})" />
+</h:panelGroup>
+</h:panelGroup>
+</h:form>
+<h:form>
+<h:commandButton action="mainpage" value="Back" />
+</h:form>
+</ui:define>
+</ui:composition>
+</h:body>
+</html>
