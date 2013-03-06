@@ -9,7 +9,10 @@ import fi.iki.photon.longminder.UserManager;
 import fi.iki.photon.longminder.UserManagerBean;
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -36,12 +39,29 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 	@Temporal(TemporalType.DATE)
     @Column(nullable=false)
 	private Date nextAlert;
-
+/*
+	@Temporal(TemporalType.DATE)
+    @Column(nullable=false)
+	private Date firingAlert;
+*/
 	@OneToOne(cascade=CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name="REPEAT", nullable=true)
 	private Repeat repeat;
+
+	@OneToMany(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="PARENTALERT", nullable=true)
+	private List<Alert> linkedAlerts;
 	
-	//bi-directional many-to-one association to Userrecord
+	@Column(nullable=false)
+	private boolean oneOff;
+
+	@Column(nullable=false)
+	private boolean dismissed;
+
+	@Column(nullable=false)
+	private boolean fired;
+
+//bi-directional many-to-one association to Userrecord
 //	@ManyToOne
 //	@JoinColumn(name="OWNER", nullable=false)
 //	private User owner;
@@ -60,26 +80,23 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 	 */
 	
 	public void initialize(AlertDTO dto) {
-		this.description = dto.getDescription();
-		this.nextAlert = dto.getNextAlert();
+		setDescription(dto.getDescription());
+		setNextAlert(dto.getNextAlert());
+		setOneOff(dto.isOneOff());
 
+		setFired(false);
+		setDismissed(false);
+		
 		if (dto.getRepeatType() == AlertDTO.REPEAT_NO) {
 			this.setRepeat(null);
 		}
 		
 		if (dto.getRepeatType() == AlertDTO.REPEAT_DAY) {
-			DayRepeat drep = new DayRepeat();
-			drep.setRepeatUntil(dto.getRepeatUntil());
-			drep.setRepeatTimes(dto.getRepeatTimes());
-			drep.setDayDelay(dto.getDayDelay());
+			DayRepeat drep = new DayRepeat(dto);
 			this.setRepeat(drep);
 		}
 		if (dto.getRepeatType() == AlertDTO.REPEAT_WEEK) {
-			WeekRepeat wrep = new WeekRepeat();
-			wrep.setRepeatUntil(dto.getRepeatUntil());
-			wrep.setRepeatTimes(dto.getRepeatTimes());
-			wrep.setWeekDelay(dto.getWeekDelay());
-			wrep.setAlertWeekDay(dto.getAlertWeekDay());
+			WeekRepeat wrep = new WeekRepeat(dto);
 			this.setRepeat(wrep);
 		}
 	}
@@ -95,24 +112,64 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 		a.setId(getId());
 		a.setDescription(getDescription());
 		a.setNextAlert(getNextAlert());
+		a.setOneOff(isOneOff());
+		a.setFired(isFired());
+		a.setDismissed(isDismissed());
 		
-		Repeat r = getRepeat();
-		a.setRepeatType(AlertDTO.REPEAT_NO);
-		if (r != null) {
-			a.setRepeatUntil(r.getRepeatUntil());
-			a.setRepeatTimes(r.getRepeatTimes());
-			if (r instanceof DayRepeat) {
-				a.setDayDelay(((DayRepeat) r).getDayDelay());
-				a.setRepeatType(AlertDTO.REPEAT_DAY);
-			}
-			if (r instanceof WeekRepeat) {
-				a.setDayDelay(((WeekRepeat) r).getWeekDelay());
-				a.setAlertWeekDay(((WeekRepeat) r).getAlertWeekDay());
-				a.setRepeatType(AlertDTO.REPEAT_WEEK);
-			}
+		if (repeat != null) {
+			repeat.initializeDTO(a);
+		} else {
+			a.setRepeatType(AlertDTO.REPEAT_NO);
 		}
 	}
 
+	/*
+	public int getRepeatType() {
+		if (getRepeat() == null) return 0;
+		if (getRepeat() instanceof DayRepeat) return 1;
+		return 2;
+	}
+*/
+	/**
+	 * Creates a new alert based on the repeat data, and moves the repeat data
+	 * to the new alert. Thus the old alert will stay in the system as a non-repeating
+	 * alert.
+     * Old alert will be linked to the new one, in the case we want to implement a single dismiss
+     * button to the newest alert.
+	 * 
+	 * @return The newly created alert.
+	 */
+	
+	public Alert rotateAlert() {
+		
+		Repeat r = getRepeat();
+		if (r != null) {
+			Date nextRepeat = getRepeat().nextAlert(getNextAlert());
+			if (r.isRepeatsLeft(nextRepeat)) {
+				Alert newAlert = new Alert();
+				newAlert.setDescription(getDescription());
+				newAlert.setNextAlert(nextRepeat);
+				newAlert.setOneOff(isOneOff());
+				newAlert.setDismissed(isDismissed());
+
+				if (r.getRepeatTimes() != null) {
+					r.setRepeatTimes(new Integer(r.getRepeatTimes().intValue() - 1));
+				}
+				newAlert.setRepeat(r);
+				
+				List<Alert> linked = newAlert.getLinkedAlerts(); 
+				if (linked == null) { linked = new ArrayList<Alert>(); newAlert.setLinkedAlerts(linked); }
+				linked.add(newAlert);
+				
+				setRepeat(null);
+				
+				return newAlert;
+			}
+			return null;
+		}
+		return null;
+	}
+	
 	public int getId() {
 		return this.id;
 	}
@@ -137,12 +194,6 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 		this.nextAlert = nextAlert;
 	}
 
-	public int getRepeatType() {
-		if (getRepeat() == null) return 0;
-		if (getRepeat() instanceof DayRepeat) return 1;
-		return 2;
-	}
-
 	public Repeat getRepeat() {
 		return repeat;
 	}
@@ -150,6 +201,36 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 	public void setRepeat(Repeat repeat) {
 		this.repeat = repeat;
 	}
-	
 
+	public boolean isOneOff() {
+		return oneOff;
+	}
+
+	public void setOneOff(boolean oneOff) {
+		this.oneOff = oneOff;
+	}
+
+	public List<Alert> getLinkedAlerts() {
+		return linkedAlerts;
+	}
+
+	public void setLinkedAlerts(List<Alert> linkedAlerts) {
+		this.linkedAlerts = linkedAlerts;
+	}
+
+	public boolean isDismissed() {
+		return dismissed;
+	}
+
+	public void setDismissed(boolean dismissed) {
+		this.dismissed = dismissed;
+	}
+
+	public boolean isFired() {
+		return fired;
+	}
+
+	public void setFired(boolean fired) {
+		this.fired = fired;
+	}
 }

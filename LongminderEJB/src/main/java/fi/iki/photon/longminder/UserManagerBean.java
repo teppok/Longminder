@@ -17,7 +17,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import fi.iki.photon.longminder.entity.Alert;
 import fi.iki.photon.longminder.entity.LoginData;
 import fi.iki.photon.longminder.entity.User;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
@@ -63,7 +62,7 @@ public class UserManagerBean implements UserManager, Serializable {
     public boolean create(UserDTO ud) {
     	if (ud == null) return false;
     	
-    	User utmp = findTrueUserOnEmail(ud.getEmail());
+    	User utmp = findTrueUserForEmail(ud.getEmail());
 
     	if (utmp != null) return false;
     	
@@ -75,6 +74,7 @@ public class UserManagerBean implements UserManager, Serializable {
     	// Flush to database so that the User instance gets its Id value.
     	em.flush();
 
+    	// Transfer the id value and the returnPassword to the UserDTO object.
     	u.initializeDTO(ud);
 
     	return true;
@@ -87,7 +87,7 @@ public class UserManagerBean implements UserManager, Serializable {
     
     @Override
     public UserDTO find(String email) {
-    	User u = findTrueUserOnEmail(email);
+    	User u = findTrueUserForEmail(email);
     	if (u == null) return null;
     	
 		UserDTO ud = new UserDTO();
@@ -97,7 +97,7 @@ public class UserManagerBean implements UserManager, Serializable {
 
     /** Given an email, returns an User instance with this Email. */
     
-    public User findTrueUserOnEmail(String email) {
+    public User findTrueUserForEmail(String email) {
 		List<User> users = em.createQuery("SELECT u FROM User u WHERE u.email LIKE ?1", User.class).setParameter(1, email).getResultList();
 		
 		if (users.size() > 0) {
@@ -113,24 +113,12 @@ public class UserManagerBean implements UserManager, Serializable {
     	return result.getResultList();
     }
 
-    /** Given an id, returns an User with this id. */ 
-
-    public User findTrueUser(int id) {
-    	return em.find(User.class, new Integer(id));
-    }
-
-    /** Given an UserDTO instance, returns an User with the same id as the UserDTO. */
-    
-    public User findTrueUser(UserDTO u) {
-    	return findTrueUser(u.getId());
-    }
-
-    /** Given an UserDTO instance, removes the user with the same Id as the UserDTO.
+    /** Removes an user with the given email.
      * */
     
-//    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void remove(UserDTO ud) {
-    	User u = findTrueUser(ud);
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void remove(String email) {
+    	User u = findTrueUserForEmail(email);
     	
     	if (u != null) {
     		em.remove(u);
@@ -146,7 +134,7 @@ public class UserManagerBean implements UserManager, Serializable {
 
     /** Removes all users from the database. */
     
-//    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void removeAll() {
     	for (User u : findAll()) {
     		em.remove(u);
@@ -154,7 +142,7 @@ public class UserManagerBean implements UserManager, Serializable {
     }
 
     /** Creates a new temporary login for the User u, adds this LoginData
-     * object to the Permanency Context and returns it.
+     * object to the Persistence Context and returns it.
      *
      * @param u
      * @return LoginData containing the generated temporary key.
@@ -202,7 +190,6 @@ public class UserManagerBean implements UserManager, Serializable {
     }
 
     /** Returns an UserDTO object, whose temporary login key matches the supplied key value.
-     * 
      */
     
 	@Override
@@ -237,12 +224,13 @@ public class UserManagerBean implements UserManager, Serializable {
 	/**
 	 * Given an user and password, returns true if the User's password matches this.
 	 * 
-	 * @param u
+	 * @param u User object
 	 * @param password
 	 * @return true if the password matches.
 	 */
 	
 	private boolean verifyPassword(User u, String password) {
+		if (u == null) return false;
 		
 		String pwHash = DigestUtils.sha512Hex(u.getSalt() + password);
 
@@ -253,7 +241,7 @@ public class UserManagerBean implements UserManager, Serializable {
 		return false;
 	}
 
-	/** Given an UserDTO object containing a valid Id value, updates the matching User 
+	/** Given an email and an UserDTO object, updates the matching User 
 	 * with the values from the UserDTO (except id). Updating logic is in 
 	 * User.initialize (currently ignores all values set to null).
 	 * 
@@ -265,19 +253,26 @@ public class UserManagerBean implements UserManager, Serializable {
 	
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	@Override
-	public boolean updateUser(UserDTO ud) {
-		User u = findTrueUser(ud);
+	public boolean updateUser(String email, UserDTO ud) {
+    	if (ud == null || email == null) return false;
+
+    	User u = findTrueUserForEmail(email);
+
+		if (u == null) return false;
+
+		System.out.println("Updateuser: " + u.getEmail());
 		
-		if (ud.getPassword1() != null) {
+		if (ud.getPassword1() != null || ( ud.getEmail() != null && ! ud.getEmail().equals(u.getEmail()))) {
+			// Either password or email change requested.
 			if (! verifyPassword(u, ud.getOldPassword())) {
 				return false;
 			}
 		}
-
-
-		if (u != null) {
-			u.initialize(ud);
-		}
+		u.initialize(ud);
+		
+		// Mainly to get returnpassword from u.
+		u.initializeDTO(ud);
+		
 		return true;
 	}
 
@@ -287,7 +282,7 @@ public class UserManagerBean implements UserManager, Serializable {
     
 	@Override
 	public void fill(UserDTO ud) {
-		User u = findTrueUserOnEmail(ud.getEmail());
+		User u = findTrueUserForEmail(ud.getEmail());
 
 		if (u != null) {
 			u.initializeDTO(ud);

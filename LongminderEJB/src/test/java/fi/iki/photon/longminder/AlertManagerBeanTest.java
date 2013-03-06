@@ -53,7 +53,6 @@ public class AlertManagerBeanTest {
 		a.setDescription("Test alarm");
 		
 		UserDTO ud = new UserDTO();
-		ud.setNickname("test");
 		ud.setEmail("test");
 		ud.setFirst("test");
 		ud.setLast("test");

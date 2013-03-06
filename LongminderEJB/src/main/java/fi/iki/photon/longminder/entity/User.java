@@ -11,6 +11,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -45,15 +46,15 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 	private String lastname;
 
 	@Column(nullable=false, length=128)
-	private String nickname;
-
-	@Column(nullable=false, length=128)
 	private String password;
 
 	@Column(nullable=false, length=128)
 	private String salt;
 
-	//bi-directional many-to-one association to Alert
+	@Column(nullable=false, length=32)
+	private String locale;
+	
+	//bi-directional one-to-many association to Alert
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="OWNER")
 	private List<Alert> alerts;
@@ -62,6 +63,12 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 	@JoinColumn(name="OWNER")
 	private List<LoginData> logins;
 
+	// The time to send a new email, if there are no new alerts.
+	@Temporal(TemporalType.DATE)
+    @Column(nullable=false)
+	private Date nextEmail;
+
+	
 	/** Collection of Group enum objects will be automatically mapped by JPA to USER_IN_GROUP table
 	 *  nicely.
 	 */
@@ -75,6 +82,7 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
     private List<Group> groups;
     
 	public User() {
+		nextEmail = new Date();
 	}
 
 	/** Given an UserDTO, updates the fields in this User object.
@@ -117,7 +125,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 			this.verified = false;
 		}
 		if (ud.getEmail() != null) { this.email = ud.getEmail(); }
-		if (ud.getNickname() != null) { this.nickname = ud.getNickname(); }
 
 		if (ud.getPassword1() != null) {
 			this.setSalt(generateSalt());
@@ -130,6 +137,8 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 				this.groups.add(Group.valueOf(g));
 			}
 		}
+
+		if (ud.getLocale() != null) { this.setLocale(ud.getLocale()); }
 	}
 
 	/** Given a UserDTO, initialize its values using the values from this User object. 
@@ -140,12 +149,12 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 	public void initializeDTO(UserDTO ud) {
 		if (ud == null) return;
 		ud.setId(getId());
-		ud.setNickname(getNickname());
 		ud.setFirst(getFirstname());
 		ud.setLast(getLastname());
 		ud.setEmail(getEmail());
 		ud.setSalt(getSalt());
 		ud.setVerified(isVerified());
+		ud.setLocale(getLocale());
 		
 		List<String> stringGroups = new ArrayList<String>(getGroups().size());
 		
@@ -188,14 +197,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
-	}
-
-	public String getNickname() {
-		return this.nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
 	}
 
 	public String getPassword() {
@@ -252,5 +253,21 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	public Date getNextEmail() {
+		return nextEmail;
+	}
+
+	public void setNextEmail(Date nextEmail) {
+		this.nextEmail = nextEmail;
 	}
 }

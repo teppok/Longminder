@@ -25,6 +25,8 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+                    
+<!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -34,6 +36,7 @@
           </archive>
         </configuration>
       </plugin>
+ -->
     </plugins>
   </build>
   <dependencies>
@@ -55,5 +58,11 @@
   		<artifactId>commons-codec</artifactId>
   		<version>1.7</version>
   	</dependency>
+  	<dependency>
+  		<groupId>LongminderEJBClient</groupId>
+  		<artifactId>LongminderEJBClient</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	
   </dependencies>
 </project>
