@@ -3,6 +3,7 @@ package fi.iki.photon.longminder;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,7 @@ public class EmailManagerBean implements EmailManager, Serializable {
 	@Resource(name="mail/longminderMail")
 	private Session mailSession;
 
-	private boolean ignoreEmail = false;
+	private boolean ignoreEmail = true;
 
     /**
      * Default constructor. 
@@ -48,7 +49,7 @@ public class EmailManagerBean implements EmailManager, Serializable {
     	// Do nothing.
     }
 
-    /** Sends a verification email to the email specified in UserDTO. */
+    /** Sends a verification email to the specified email. */
     
 	@Override
 	public boolean sendVerificationEmail(String serverBase, String email) {
@@ -109,6 +110,12 @@ public class EmailManagerBean implements EmailManager, Serializable {
 			
 			if (ignoreEmail) {
 				System.out.println(alertString);
+
+				Calendar alertCal = Calendar.getInstance();
+				alertCal.setTime(new Date());
+				alertCal.add(Calendar.DAY_OF_MONTH, 3);
+				u.setNextEmail(alertCal.getTime());
+
 				return;
 			}
 
@@ -121,6 +128,12 @@ public class EmailManagerBean implements EmailManager, Serializable {
 			msg.setSentDate(new Date());
 			
 			Transport.send(msg);
+			
+			Calendar alertCal = Calendar.getInstance();
+			alertCal.setTime(new Date());
+			alertCal.add(Calendar.DAY_OF_MONTH, 3);
+			u.setNextEmail(alertCal.getTime());
+			
 			
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -141,41 +154,45 @@ public class EmailManagerBean implements EmailManager, Serializable {
 		DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(u.getLocale().substring(0, 2)));
 
 		List<Alert> newAlertList = new ArrayList<Alert>();
+
+		boolean newAlertsEncountered = false;
 		
-		try { 
 		for (Alert a : alerts) {
-				boolean alertLoop = true;
-				boolean newAlerts = true;
-				while (alertLoop && newAlerts) {
+			boolean newAlertsCreated = true;
+			while (newAlertsCreated) {
+				newAlertsCreated = false;
+				System.out.println(a.getDescription());
+				if (a.getNextAlert().before(now)) {
 					System.out.println(a.getDescription());
-					if (a.getNextAlert().before(now)) {
-						System.out.println(a.getDescription());
-						alertString += res.getString("email.alert") + " \"" + a.getDescription() + "\" " + res.getString("email.due") + " " + format.format(a.getNextAlert()) + "\n";
-	
-						alertsFired = true;
-						Alert newAlert = a.rotateAlert();
-						a.setFired(true);
+					alertString += res.getString("email.alert") + " \"" + a.getDescription() + "\" " + res.getString("email.due") + " " + format.format(a.getNextAlert()) + "\n";
+
+					alertsFired = true;
+					Alert newAlert = a.rotateAlert();
+					
+					if (! a.isFired()) {
+						newAlertsEncountered = true;
+					}
+					
+					a.setFired(true);
+					
+					if (newAlert != null) {
 						newAlertList.add(newAlert);
-						
-						if (newAlert != null) {
-							newAlerts = true;
-							a = newAlert;
-						} else {
-							newAlerts = false;
-						}
-					} else {
-						alertLoop = false;
+						newAlertsCreated = true;
+						a = newAlert;
 					}
 				}
+			}
 		}
 		u.getAlerts().addAll(newAlertList);
-		} catch (java.util.ConcurrentModificationException e) {
-			e.printStackTrace();
-			System.out.println("VERY WEIRD");
-		}
+		
 		alertString += "\n" + res.getString("email.ending");
 
 		if (! alertsFired) return null;
+
+		// If no unfired alerts and next email date is not met, skip sending. 
+		if (! newAlertsEncountered && u.getNextEmail().after(now)) {
+			return null;
+		}
 		
 		return alertString;
 	}
