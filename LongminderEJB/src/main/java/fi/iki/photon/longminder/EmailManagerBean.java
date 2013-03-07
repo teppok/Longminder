@@ -48,6 +48,7 @@ public class EmailManagerBean implements EmailManager, Serializable {
 
 	private boolean ignoreEmail = true;
 
+	// TODO Get serverBase from JDNI or something, instead of a parameter to request.
 	private String serverBase = null;
 	
     /**
