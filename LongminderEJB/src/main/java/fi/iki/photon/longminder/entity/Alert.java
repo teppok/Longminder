@@ -9,7 +9,6 @@ import fi.iki.photon.longminder.UserManager;
 import fi.iki.photon.longminder.UserManagerBean;
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -135,16 +134,13 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
                 newAlert.setDismissed(isDismissed());
 
                 if (r.getRepeatTimes() != null) {
-                    r.setRepeatTimes(new Integer(
+                    r.setRepeatTimes(Integer.valueOf(
                             r.getRepeatTimes().intValue() - 1));
                 }
                 newAlert.setRepeat(r);
 
                 List<Alert> linked = newAlert.getLinkedAlerts();
-                if (linked == null) {
-                    linked = new ArrayList<Alert>();
-                    newAlert.setLinkedAlerts(linked);
-                }
+                
                 linked.add(newAlert);
 
                 setRepeat(null);
@@ -173,11 +169,11 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     }
 
     public Date getNextAlert() {
-        return this.nextAlert;
+        return this.nextAlert == null ? null : (Date) nextAlert.clone();
     }
 
     public void setNextAlert(Date nextAlert) {
-        this.nextAlert = nextAlert;
+        this.nextAlert = (nextAlert == null ? null : (Date) nextAlert.clone());
     }
 
     public Repeat getRepeat() {

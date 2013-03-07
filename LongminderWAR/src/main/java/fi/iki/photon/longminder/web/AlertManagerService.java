@@ -24,9 +24,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 @Stateless
 @LocalBean
-public class AlertManagerService implements Serializable {
-
-    private static final long serialVersionUID = 505412290274294293L;
+public class AlertManagerService {
 
     @EJB
     AlertManager am;

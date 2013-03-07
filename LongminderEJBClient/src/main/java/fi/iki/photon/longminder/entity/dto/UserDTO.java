@@ -15,9 +15,7 @@ import java.util.List;
  * 
  */
 
-public class UserDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class UserDTO {
 
     private int id;
     private String password1;

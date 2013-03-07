@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.DeclareRoles;

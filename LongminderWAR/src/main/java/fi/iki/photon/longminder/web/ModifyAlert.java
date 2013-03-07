@@ -26,9 +26,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
 @ManagedBean
 @RequestScoped
-public class ModifyAlert extends AlertDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ModifyAlert extends AlertDTO {
 
     @EJB
     AlertManagerService ams;

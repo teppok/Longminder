@@ -37,11 +37,11 @@ public class LoginData implements Serializable {
     }
 
     public Date getIssued() {
-        return this.issued;
+        return this.issued == null ? null : (Date) issued.clone();
     }
 
     public void setIssued(Date issued) {
-        this.issued = issued;
+        this.issued = (issued == null ? null : (Date) issued.clone());
     }
 
 }

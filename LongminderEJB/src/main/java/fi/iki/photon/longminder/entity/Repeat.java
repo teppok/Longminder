@@ -96,11 +96,11 @@ abstract public class Repeat implements Serializable {
     }
 
     public Date getRepeatUntil() {
-        return repeatUntil;
+        return repeatUntil == null ? null : (Date) repeatUntil.clone();
     }
 
     public void setRepeatUntil(Date repeatUntil) {
-        this.repeatUntil = repeatUntil;
+        this.repeatUntil = (repeatUntil == null ? null : (Date) repeatUntil.clone());
     }
 
     abstract public Date nextAlert(Date fromDate);

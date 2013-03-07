@@ -15,9 +15,7 @@ import java.util.Date;
  * 
  */
 
-public class AlertDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class AlertDTO {
     public static final int REPEAT_NO = 0;
     public static final int REPEAT_DAY = 1;
     public static final int REPEAT_WEEK = 2;
@@ -101,11 +99,11 @@ public class AlertDTO implements Serializable {
     }
 
     public Date getRepeatUntil() {
-        return repeatUntil;
+        return repeatUntil == null ? null : (Date) repeatUntil.clone();
     }
 
     public void setRepeatUntil(Date repeatUntil) {
-        this.repeatUntil = repeatUntil;
+        this.repeatUntil = (repeatUntil == null ? null : (Date) repeatUntil.clone());
     }
 
     public Integer getRepeatTimes() {
@@ -117,11 +115,11 @@ public class AlertDTO implements Serializable {
     }
 
     public Date getNextAlert() {
-        return nextAlert;
+        return nextAlert == null ? null : (Date) nextAlert.clone();
     }
 
     public void setNextAlert(Date nextAlert) {
-        this.nextAlert = nextAlert;
+        this.nextAlert = (nextAlert == null ? null : (Date) nextAlert.clone());
     }
 
     public int getDayDelay() {

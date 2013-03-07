@@ -29,9 +29,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
  */
 @Stateless
 @LocalBean
-public class AlertManagerBean implements AlertManager, Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class AlertManagerBean implements AlertManager {
 
     @PersistenceContext
     private EntityManager em;
@@ -86,7 +84,7 @@ public class AlertManagerBean implements AlertManager, Serializable {
                 .createQuery(
                         "SELECT a FROM User u JOIN u.alerts a WHERE u.email = ?1 AND a.id = ?2",
                         Alert.class).setParameter(1, email)
-                .setParameter(2, new Integer(id)).getResultList();
+                .setParameter(2, Integer.valueOf(id)).getResultList();
 
         if (alerts != null && alerts.size() > 0) {
             return alerts.get(0);

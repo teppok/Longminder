@@ -2,7 +2,6 @@ package fi.iki.photon.longminder;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +26,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
  */
 @Stateless
 @LocalBean
-public class UserManagerBean implements UserManager, Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class UserManagerBean implements UserManager {
 
     /** Characteds to create random strings. */
 
@@ -175,7 +172,7 @@ public class UserManagerBean implements UserManager, Serializable {
         newLogin.setLoginkey(random);
         newLogin.setIssued(new Date());
 
-        u.setLogins(new ArrayList<LoginData>(1));
+        u.getLogins().clear();
 
         u.getLogins().add(newLogin);
 

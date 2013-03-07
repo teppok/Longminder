@@ -34,9 +34,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 @Stateless
 @LocalBean
-public class UserManagerService implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class UserManagerService {
 
     @EJB
     private UserManager um;

@@ -131,7 +131,7 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 		}
 
 		if (ud.getGroups() != null) {
-			this.groups = new ArrayList<Group>(ud.getGroups().size());
+			//this.groups = new ArrayList<Group>(ud.getGroups().size());
 			for (String g : ud.getGroups()) {
 				this.groups.add(Group.valueOf(g));
 			}
@@ -263,10 +263,10 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 	}
 
 	public Date getNextEmail() {
-		return nextEmail;
+		return nextEmail == null ? null : (Date) nextEmail.clone();
 	}
 
 	public void setNextEmail(Date nextEmail) {
-		this.nextEmail = nextEmail;
+		this.nextEmail = (nextEmail == null ? null : (Date) nextEmail.clone());
 	}
 }
