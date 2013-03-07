@@ -225,7 +225,7 @@ public class UserManagerService implements Serializable {
 	public boolean sendVerificationEmail(HttpServletRequest req) {
 		String serverBase = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/" + req.getContextPath();
 		//System.out.println("SERVER BASE " + serverBase);
-		return emm.sendVerificationEmail(serverBase, req.getRemoteUser());
+		return emm.requestVerificationEmail(serverBase, req.getRemoteUser());
 	}
 	
 }
