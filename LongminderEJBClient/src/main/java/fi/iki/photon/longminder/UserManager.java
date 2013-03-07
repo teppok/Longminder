@@ -9,19 +9,17 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 public interface UserManager {
     public String hello();
 
-	public boolean create(UserDTO u);
-	
-//	Userrecord find(int id);
+    public boolean create(UserDTO u);
 
-	public UserDTO find(String email);
-	
-	public void remove(String email);
-	
-	public UserDTO findWithLoginKey(String key);
-	
-	public boolean verify(String key);
-	
-	public boolean updateUser(String email, UserDTO u);
-	
-	public void fill(String email, UserDTO u);
+    public UserDTO find(String email);
+
+    public void remove(String email);
+
+    public UserDTO findWithLoginKey(String key);
+
+    public boolean verify(String key);
+
+    public boolean updateUser(String email, UserDTO u);
+
+    public void fill(String email, UserDTO u);
 }

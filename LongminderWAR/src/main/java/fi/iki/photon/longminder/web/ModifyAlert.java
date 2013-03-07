@@ -16,51 +16,58 @@ import javax.servlet.http.HttpServletRequest;
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
 /**
- * A backing bean for modifyalert.xhtml.
- * Extends AlertDTO so the values are easy to set and read.
+ * A backing bean for modifyalert.xhtml. Extends AlertDTO so the values are easy
+ * to set and read.
  * 
  * 
  * @author Teppo Kankaanp‰‰
- *
+ * 
  */
 
 @ManagedBean
 @RequestScoped
 public class ModifyAlert extends AlertDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@EJB AlertManagerService ams;
+    @EJB
+    AlertManagerService ams;
 
-	/**
-	 * Called on preRenderView, initializes the data in this object.
-	 * @param cse
-	 */
+    /**
+     * Called on preRenderView, initializes the data in this object.
+     * 
+     * @param cse
+     */
 
-	public void initialize(ComponentSystemEvent cse) {
-		if (!FacesContext.getCurrentInstance().isPostback()) {
-			HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			
-			System.out.println("INIT ALERT");
-			System.out.println(getId());
-			ams.fill(req, this);
-		}
-	}
+    public void initialize(ComponentSystemEvent cse) {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            HttpServletRequest req = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
 
-	/**
-	 * Sends a modification request to AlertManagerService for the data in this request.
-	 * @return "mainpage" if successful, null if not
-	 */
-	
-	public String modify() {
-		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            System.out.println("INIT ALERT");
+            System.out.println(getId());
+            ams.fill(req, this);
+        }
+    }
 
-		// TODO Validate input!
-		
-		boolean result = ams.modify(req, this);
-		
-		if (result) return "mainpage";
+    /**
+     * Sends a modification request to AlertManagerService for the data in this
+     * request.
+     * 
+     * @return "mainpage" if successful, null if not
+     */
 
-		return null;
-	}
+    public String modify() {
+        HttpServletRequest req = (HttpServletRequest) FacesContext
+                .getCurrentInstance().getExternalContext().getRequest();
+
+        // TODO Validate input!
+
+        boolean result = ams.modify(req, this);
+
+        if (result)
+            return "mainpage";
+
+        return null;
+    }
 }

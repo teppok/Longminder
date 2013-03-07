@@ -5,28 +5,28 @@ import javax.persistence.*;
 
 /**
  * Entity implementation class for Entity: EmailRequest
- *
+ * 
  */
 @Entity
 public class EmailRequest implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@OneToOne
-	@JoinColumn(nullable=false)
-	private User owner;
+    private static final long serialVersionUID = 1L;
 
-	public EmailRequest() {
-		super();
-	}
+    @Id
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private User owner;
 
-	public User getOwner() {
-		return owner;
-	}
+    public EmailRequest() {
+        super();
+    }
 
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
 }

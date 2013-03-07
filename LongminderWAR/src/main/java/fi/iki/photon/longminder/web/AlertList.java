@@ -15,67 +15,74 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
 /**
- * A backing bean for mainpage.xhtml that fetches the alert list and handles delete alert and dismiss alert requests.
+ * A backing bean for mainpage.xhtml that fetches the alert list and handles
+ * delete alert and dismiss alert requests.
  * 
  * @author Teppo Kankaanp‰‰
- *
+ * 
  */
 
 @ManagedBean
 @RequestScoped
 public class AlertList {
-	@EJB AlertManagerService ams;
-	
-	private List<AlertDTO> alerts;
-	
-	/**
-	 * Fetches the data from the database to alerts.
-	 */
-	
-	public void initialize() {
-		if (!FacesContext.getCurrentInstance().isPostback()) {
-			HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			if (req != null) {
-				setAlerts(ams.getAlertsForList(req));
-			}
-		}
-	}
+    @EJB
+    AlertManagerService ams;
 
-	/**
-	 * Deletes an alert with given id.
-	 * @param id
-	 * @return null
-	 */
-	
-	public String deleteAlert(String id) {
-		System.out.println("Delete "+id);
-		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		
-		ams.deleteAlert(req, Integer.parseInt(id));
-		return null;
-	}
+    private List<AlertDTO> alerts;
 
-	/**
-	 * Dismisses an alert with the given id.
-	 * @param id
-	 * @return null
-	 */
-	
-	public String dismiss(String id) {
-		System.out.println("Dismiss "+id);
-		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+    /**
+     * Fetches the data from the database to alerts.
+     */
 
-		ams.dismiss(req, Integer.parseInt(id));
-		return null;
-	}
+    public void initialize() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            HttpServletRequest req = (HttpServletRequest) FacesContext
+                    .getCurrentInstance().getExternalContext().getRequest();
+            if (req != null) {
+                setAlerts(ams.getAlertsForList(req));
+            }
+        }
+    }
 
-	public List<AlertDTO> getAlerts() {
-		initialize();
-		return alerts;
-	}
+    /**
+     * Deletes an alert with given id.
+     * 
+     * @param id
+     * @return null
+     */
 
-	public void setAlerts(List<AlertDTO> alerts) {
-		this.alerts = alerts;
-	}
-	
+    public String deleteAlert(String id) {
+        System.out.println("Delete " + id);
+        HttpServletRequest req = (HttpServletRequest) FacesContext
+                .getCurrentInstance().getExternalContext().getRequest();
+
+        ams.deleteAlert(req, Integer.parseInt(id));
+        return null;
+    }
+
+    /**
+     * Dismisses an alert with the given id.
+     * 
+     * @param id
+     * @return null
+     */
+
+    public String dismiss(String id) {
+        System.out.println("Dismiss " + id);
+        HttpServletRequest req = (HttpServletRequest) FacesContext
+                .getCurrentInstance().getExternalContext().getRequest();
+
+        ams.dismiss(req, Integer.parseInt(id));
+        return null;
+    }
+
+    public List<AlertDTO> getAlerts() {
+        initialize();
+        return alerts;
+    }
+
+    public void setAlerts(List<AlertDTO> alerts) {
+        this.alerts = alerts;
+    }
+
 }

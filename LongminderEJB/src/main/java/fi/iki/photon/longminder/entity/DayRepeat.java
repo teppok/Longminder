@@ -18,53 +18,59 @@ import javax.persistence.*;
 @DiscriminatorValue("DAYREPEAT")
 public class DayRepeat extends Repeat implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int dayDelay;
-	
-	public DayRepeat() {
-		super();
-	}
+    private int dayDelay;
 
-	/**
-	 * Initializes the Repeat object based on values in AlertDTO.
-	 * @param dto
-	 */
-	
-	public DayRepeat(AlertDTO dto) {
-		super(dto);
-		setDayDelay(dto.getDayDelay());
+    public DayRepeat() {
+        super();
+    }
 
-	}
+    /**
+     * Initializes the Repeat object based on values in AlertDTO.
+     * 
+     * @param dto
+     */
 
-	/** Given an AlertDTO object, inserts the related values into the object. 
-	 * @param dto AlertDTO to be initialized. 
-	 * */
-	
-	public void initializeDTO(AlertDTO dto) {
-		super.initializeDTO(dto);
-		dto.setDayDelay(getDayDelay());
-		dto.setRepeatType(AlertDTO.REPEAT_DAY);
-	}
+    public DayRepeat(AlertDTO dto) {
+        super(dto);
+        setDayDelay(dto.getDayDelay());
 
-	/** Gives the next alert calculated from the given date.
-	 * @param fromDate 
-	 * @return Date instance representing the new time.
-	 */
-	
-	public Date nextAlert(Date fromDate) {
-		Calendar alertCal = Calendar.getInstance();
-		alertCal.setTime(fromDate);
-		alertCal.add(Calendar.DAY_OF_MONTH, dayDelay);
-		return alertCal.getTime();
-	}
+    }
 
-	public int getDayDelay() {
-		return dayDelay;
-	}
+    /**
+     * Given an AlertDTO object, inserts the related values into the object.
+     * 
+     * @param dto
+     *            AlertDTO to be initialized.
+     * */
 
-	public void setDayDelay(int dayDelay) {
-		this.dayDelay = dayDelay;
-	}
-   
+    public void initializeDTO(AlertDTO dto) {
+        super.initializeDTO(dto);
+        dto.setDayDelay(getDayDelay());
+        dto.setRepeatType(AlertDTO.REPEAT_DAY);
+    }
+
+    /**
+     * Gives the next alert calculated from the given date.
+     * 
+     * @param fromDate
+     * @return Date instance representing the new time.
+     */
+
+    public Date nextAlert(Date fromDate) {
+        Calendar alertCal = Calendar.getInstance();
+        alertCal.setTime(fromDate);
+        alertCal.add(Calendar.DAY_OF_MONTH, dayDelay);
+        return alertCal.getTime();
+    }
+
+    public int getDayDelay() {
+        return dayDelay;
+    }
+
+    public void setDayDelay(int dayDelay) {
+        this.dayDelay = dayDelay;
+    }
+
 }
