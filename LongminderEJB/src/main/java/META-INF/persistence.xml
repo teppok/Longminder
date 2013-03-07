@@ -8,6 +8,7 @@
 		<class>fi.iki.photon.longminder.entity.DayRepeat</class>
 		<class>fi.iki.photon.longminder.entity.WeekRepeat</class>
 		<class>fi.iki.photon.longminder.entity.LoginData</class>
+		<class>fi.iki.photon.longminder.entity.EmailRequest</class>
 	    <properties>
 	      <property name="eclipselink.ddl-generation" value="create-tables"/>
 	      <!-- logging -->

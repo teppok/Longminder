@@ -20,8 +20,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import fi.iki.photon.longminder.entity.Alert;
+import fi.iki.photon.longminder.entity.EmailRequest;
 import fi.iki.photon.longminder.entity.User;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 
@@ -36,12 +39,17 @@ public class EmailManagerBean implements EmailManager, Serializable {
 	
 	@EJB UserManagerBean um;
 	@EJB AlertManagerBean am;
-	
+
+	@PersistenceContext
+    private EntityManager em;
+
 	@Resource(name="mail/longminderMail")
 	private Session mailSession;
 
 	private boolean ignoreEmail = true;
 
+	private String serverBase = null;
+	
     /**
      * Default constructor. 
      */
@@ -49,10 +57,21 @@ public class EmailManagerBean implements EmailManager, Serializable {
     	// Do nothing.
     }
 
+    @Override
+    public boolean requestVerificationEmail(String server, String email) {
+    	this.serverBase = server;
+    	
+		User u = um.findTrueUserForEmail(email);
+    	EmailRequest request = new EmailRequest();
+    	request.setOwner(u);
+
+    	em.persist(request);
+    	return true;
+    }
+    
     /** Sends a verification email to the specified email. */
     
-	@Override
-	public boolean sendVerificationEmail(String serverBase, String email) {
+	public boolean sendVerificationEmail(String email) {
 		try {
 			User u = um.findTrueUserForEmail(email);
 			um.createLogin(u);
@@ -90,18 +109,19 @@ public class EmailManagerBean implements EmailManager, Serializable {
 		for (User u : users) {
 			sendAlertEmail(u);
 		}
+		
+		if (serverBase != null) {
+			List<EmailRequest> requests = em.createQuery("SELECT r FROM Request r", EmailRequest.class).getResultList();
+			
+			for (EmailRequest e : requests) {
+				sendVerificationEmail(e.getOwner().getEmail());
+			}
+		}
 	}
 
 	private void sendAlertEmail(User u) {
 		try {
-/*			um.createLogin(u);
-			if (u.getLogins() == null || u.getLogins().size() == 0) {
-				throw new Error("Login key should have been created.");
-			}
-			String key = u.getLogins().get(0).getLoginkey();
-*/	
 			String alertString = getAlertEmailString(u);
-			
 			
 			if (alertString == null) {
 				System.out.println("Skipping " + u.getEmail());

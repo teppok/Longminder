@@ -39,11 +39,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 	@Temporal(TemporalType.DATE)
     @Column(nullable=false)
 	private Date nextAlert;
-/*
-	@Temporal(TemporalType.DATE)
-    @Column(nullable=false)
-	private Date firingAlert;
-*/
+	
 	@OneToOne(cascade=CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name="REPEAT", nullable=true)
 	private Repeat repeat;
@@ -60,11 +56,6 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 
 	@Column(nullable=false)
 	private boolean fired;
-
-//bi-directional many-to-one association to Userrecord
-//	@ManyToOne
-//	@JoinColumn(name="OWNER", nullable=false)
-//	private User owner;
 
 	protected Alert() {
 	}
@@ -123,13 +114,6 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 		}
 	}
 
-	/*
-	public int getRepeatType() {
-		if (getRepeat() == null) return 0;
-		if (getRepeat() instanceof DayRepeat) return 1;
-		return 2;
-	}
-*/
 	/**
 	 * Creates a new alert based on the repeat data, and moves the repeat data
 	 * to the new alert. Thus the old alert will stay in the system as a non-repeating

@@ -72,7 +72,7 @@ public class AlertManagerBean implements AlertManager, Serializable {
      * Also sets fired and dismissed statuses to false.
      */
     
-//    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	@Override
 	public void update(String email, AlertDTO modify) {
     	Alert a = findTrueAlert(email, modify.getId());
@@ -111,15 +111,6 @@ public class AlertManagerBean implements AlertManager, Serializable {
 		return findTrueAlert(email, adto.getId());
 	}
 
-	/** Given an UserDTO with a valid Email field, adds an alert with values from AlertDTO for this
-	 * User.
-	 */
-	/*
-	public boolean addAlert(UserDTO udto, AlertDTO adto) {
-		return addAlert(udto.getEmail(), adto);
-	}
-	*/
-	
 	/** Given an user id, adds an alert with values from AlertDTO for this User. */
 	
 	@Override
@@ -252,7 +243,6 @@ public class AlertManagerBean implements AlertManager, Serializable {
 		return listResult;
 	}
 
-	// dismiss an alert that's not One-off
 	@Override
 	public void dismiss(String email, int id) {
 		Alert a = findTrueAlert(email, id);

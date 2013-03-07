@@ -21,7 +21,6 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="DISCRIMINATOR",
                      discriminatorType=DiscriminatorType.STRING)
-//@DiscriminatorValue("REPEAT")
 abstract public class Repeat implements Serializable {
 
 	
@@ -38,13 +37,6 @@ abstract public class Repeat implements Serializable {
 	@Temporal(TemporalType.DATE)
     private Date repeatUntil;
 
-
-    // False = repeat from due date
-    // True = repeat from completion date
-    // Not used yet.
-    @Column(nullable=false)
-    private boolean repeatFromCompletion;
-    
 	public Repeat() {
 		super();
 	}
@@ -81,45 +73,29 @@ abstract public class Repeat implements Serializable {
 		if (repeatUntil != null && nextRepeat.after(repeatUntil)) return false;
 		return true;
 	}
-	
 
 	public int getId() {
 		return id;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 
 	public Integer getRepeatTimes() {
 		return repeatTimes;
 	}
 
-
 	public void setRepeatTimes(Integer repeatTimes) {
 		this.repeatTimes = repeatTimes;
 	}
-
 
 	public Date getRepeatUntil() {
 		return repeatUntil;
 	}
 
-
 	public void setRepeatUntil(Date repeatUntil) {
 		this.repeatUntil = repeatUntil;
-	}
-
-
-	public boolean isRepeatFromCompletion() {
-		return repeatFromCompletion;
-	}
-
-
-	public void setRepeatFromCompletion(boolean repeatFromCompletion) {
-		this.repeatFromCompletion = repeatFromCompletion;
 	}
 
 	abstract public Date nextAlert(Date fromDate);

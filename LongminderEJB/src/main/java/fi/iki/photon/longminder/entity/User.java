@@ -68,7 +68,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
     @Column(nullable=false)
 	private Date nextEmail;
 
-	
 	/** Collection of Group enum objects will be automatically mapped by JPA to USER_IN_GROUP table
 	 *  nicely.
 	 */
