@@ -33,9 +33,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
  */
 @Stateless
 @LocalBean
-public class EmailManagerBean implements EmailManager, Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class EmailManagerBean implements EmailManager {
 
     @EJB
     UserManagerBean um;
@@ -52,7 +50,7 @@ public class EmailManagerBean implements EmailManager, Serializable {
 
     // TODO Get serverBase from JDNI or something, instead of a parameter to
     // request.
-    private String serverBase = null;
+    private String serverBase = "http://localhost:8080/longminder";
 
     /**
      * Default constructor.
@@ -66,6 +64,11 @@ public class EmailManagerBean implements EmailManager, Serializable {
         this.serverBase = server;
 
         User u = um.findTrueUserForEmail(email);
+
+        // Test if we already have requested a verification.
+        EmailRequest test = em.find(EmailRequest.class, u);
+        if (test != null) return true;
+        
         EmailRequest request = new EmailRequest();
         request.setOwner(u);
 
@@ -124,11 +127,12 @@ public class EmailManagerBean implements EmailManager, Serializable {
 
         if (serverBase != null) {
             List<EmailRequest> requests = em.createQuery(
-                    "SELECT r FROM Request r", EmailRequest.class)
+                    "SELECT r FROM EmailRequest r", EmailRequest.class)
                     .getResultList();
 
             for (EmailRequest e : requests) {
                 sendVerificationEmail(e.getOwner().getEmail());
+                em.remove(e);
             }
         }
     }
@@ -185,9 +189,10 @@ public class EmailManagerBean implements EmailManager, Serializable {
         ResourceBundle res = ResourceBundle
                 .getBundle("fi.iki.photon.longminder.Messages");
 
-        String alertString = res.getString("email.greeting") + " "
+        StringBuffer alertString = new StringBuffer();
+        alertString.append(res.getString("email.greeting") + " "
                 + u.getFirstname() + ", \n\n"
-                + res.getString("email.alertsdue") + ":\n\n";
+                + res.getString("email.alertsdue") + ":\n\n");
         Date now = new Date();
         DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 new Locale(u.getLocale().substring(0, 2)));
@@ -203,10 +208,10 @@ public class EmailManagerBean implements EmailManager, Serializable {
                 System.out.println(a.getDescription());
                 if (a.getNextAlert().before(now)) {
                     System.out.println(a.getDescription());
-                    alertString += res.getString("email.alert") + " \""
+                    alertString.append(res.getString("email.alert") + " \""
                             + a.getDescription() + "\" "
                             + res.getString("email.due") + " "
-                            + format.format(a.getNextAlert()) + "\n";
+                            + format.format(a.getNextAlert()) + "\n");
 
                     alertsFired = true;
                     Alert newAlert = a.rotateAlert();
@@ -227,7 +232,7 @@ public class EmailManagerBean implements EmailManager, Serializable {
         }
         u.getAlerts().addAll(newAlertList);
 
-        alertString += "\n" + res.getString("email.ending");
+        alertString.append("\n" + res.getString("email.ending"));
 
         if (!alertsFired)
             return null;
@@ -237,6 +242,6 @@ public class EmailManagerBean implements EmailManager, Serializable {
             return null;
         }
 
-        return alertString;
+        return alertString.toString();
     }
 }
