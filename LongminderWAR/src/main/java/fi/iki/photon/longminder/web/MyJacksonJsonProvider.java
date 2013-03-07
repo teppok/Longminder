@@ -24,7 +24,8 @@ public class MyJacksonJsonProvider implements ContextResolver<ObjectMapper> {
     static {
         // since Jackson 1.9
         // this default configuration can be overwritten via annotations
-        MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
+        MyJacksonJsonProvider.MAPPER
+                .setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
     }
 
     public MyJacksonJsonProvider() {
@@ -33,8 +34,8 @@ public class MyJacksonJsonProvider implements ContextResolver<ObjectMapper> {
     }
 
     @Override
-    public ObjectMapper getContext(Class<?> type) {
+    public ObjectMapper getContext(final Class<?> type) {
         System.out.println("MyJacksonProvider.getContext(): " + type);
-        return MAPPER;
+        return MyJacksonJsonProvider.MAPPER;
     }
 }

@@ -3,10 +3,8 @@ package fi.iki.photon.longminder;
 import java.util.List;
 
 import javax.ejb.Local;
-import javax.ejb.Remote;
 
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
-import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 @Local
 public interface AlertManager {

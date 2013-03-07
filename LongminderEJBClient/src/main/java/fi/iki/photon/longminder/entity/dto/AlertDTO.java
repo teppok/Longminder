@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder.entity.dto;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -52,10 +51,11 @@ public class AlertDTO {
      */
 
     public int getTimeLeft() {
-        Calendar later = Calendar.getInstance();
+        final Calendar later = Calendar.getInstance();
         later.setTime(nextAlert);
-        Calendar now = Calendar.getInstance();
-        float diffmillis = later.getTimeInMillis() - now.getTimeInMillis();
+        final Calendar now = Calendar.getInstance();
+        final float diffmillis = later.getTimeInMillis()
+                - now.getTimeInMillis();
         return (int) Math.ceil(diffmillis / (1000 * 60 * 60 * 24));
     }
 
@@ -66,7 +66,7 @@ public class AlertDTO {
      * @param autoRepeat
      */
 
-    public void setOneOffInt(int autoRepeat) {
+    public void setOneOffInt(final int autoRepeat) {
         if (autoRepeat == 1) {
             setOneOff(true);
         } else {
@@ -81,8 +81,9 @@ public class AlertDTO {
      */
 
     public int getOneOffInt() {
-        if (isOneOff())
+        if (isOneOff()) {
             return 1;
+        }
         return 2;
     }
 
@@ -94,7 +95,7 @@ public class AlertDTO {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -102,15 +103,16 @@ public class AlertDTO {
         return repeatUntil == null ? null : (Date) repeatUntil.clone();
     }
 
-    public void setRepeatUntil(Date repeatUntil) {
-        this.repeatUntil = (repeatUntil == null ? null : (Date) repeatUntil.clone());
+    public void setRepeatUntil(final Date repeatUntil) {
+        this.repeatUntil = (repeatUntil == null ? null : (Date) repeatUntil
+                .clone());
     }
 
     public Integer getRepeatTimes() {
         return repeatTimes;
     }
 
-    public void setRepeatTimes(Integer repeatTimes) {
+    public void setRepeatTimes(final Integer repeatTimes) {
         this.repeatTimes = repeatTimes;
     }
 
@@ -118,7 +120,7 @@ public class AlertDTO {
         return nextAlert == null ? null : (Date) nextAlert.clone();
     }
 
-    public void setNextAlert(Date nextAlert) {
+    public void setNextAlert(final Date nextAlert) {
         this.nextAlert = (nextAlert == null ? null : (Date) nextAlert.clone());
     }
 
@@ -126,7 +128,7 @@ public class AlertDTO {
         return dayDelay;
     }
 
-    public void setDayDelay(int dayDelay) {
+    public void setDayDelay(final int dayDelay) {
         this.dayDelay = dayDelay;
     }
 
@@ -134,7 +136,7 @@ public class AlertDTO {
         return weekDelay;
     }
 
-    public void setWeekDelay(int weekDelay) {
+    public void setWeekDelay(final int weekDelay) {
         this.weekDelay = weekDelay;
     }
 
@@ -142,7 +144,7 @@ public class AlertDTO {
         return alertWeekDay;
     }
 
-    public void setAlertWeekDay(int alertWeekDay) {
+    public void setAlertWeekDay(final int alertWeekDay) {
         this.alertWeekDay = alertWeekDay;
     }
 
@@ -150,7 +152,7 @@ public class AlertDTO {
         return repeatType;
     }
 
-    public void setRepeatType(int repeatType) {
+    public void setRepeatType(final int repeatType) {
         this.repeatType = repeatType;
     }
 
@@ -158,7 +160,7 @@ public class AlertDTO {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -166,7 +168,7 @@ public class AlertDTO {
         return oneOff;
     }
 
-    public void setOneOff(boolean oneOff) {
+    public void setOneOff(final boolean oneOff) {
         this.oneOff = oneOff;
     }
 
@@ -174,7 +176,7 @@ public class AlertDTO {
         return dismissed;
     }
 
-    public void setDismissed(boolean dismissed) {
+    public void setDismissed(final boolean dismissed) {
         this.dismissed = dismissed;
     }
 
@@ -182,7 +184,7 @@ public class AlertDTO {
         return fired;
     }
 
-    public void setFired(boolean fired) {
+    public void setFired(final boolean fired) {
         this.fired = fired;
     }
 }

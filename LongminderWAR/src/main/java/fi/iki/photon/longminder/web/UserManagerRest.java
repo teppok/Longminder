@@ -1,14 +1,7 @@
 package fi.iki.photon.longminder.web;
 
-import java.util.List;
-
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.jws.WebService;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -16,7 +9,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -52,10 +44,10 @@ public class UserManagerRest {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("login")
-    public Response login(@FormParam(value = "name") String name,
-            @FormParam(value = "password") String password,
-            @Context HttpServletRequest req) {
-        JsonResponse response = new JsonResponse();
+    public Response login(@FormParam(value = "name") final String name,
+            @FormParam(value = "password") final String password,
+            @Context final HttpServletRequest req) {
+        final JsonResponse response = new JsonResponse();
         System.out.println("Login " + name + " " + password);
         if (!ums.login(name, password, req)) {
             response.setStatus("FAILED");
@@ -72,8 +64,9 @@ public class UserManagerRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("register")
-    public Response register(UserDTO ud, @Context HttpServletRequest req) {
-        JsonResponse response = new JsonResponse();
+    public Response register(final UserDTO ud,
+            @Context final HttpServletRequest req) {
+        final JsonResponse response = new JsonResponse();
 
         if (!ums.register(ud, req)) {
             response.setStatus("FAILED");
@@ -88,8 +81,8 @@ public class UserManagerRest {
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("logout")
-    public Response logout(@Context HttpServletRequest req) {
-        JsonResponse response = new JsonResponse();
+    public Response logout(@Context final HttpServletRequest req) {
+        final JsonResponse response = new JsonResponse();
 
         ums.logout(req);
 

@@ -1,13 +1,8 @@
 package fi.iki.photon.longminder.web;
 
-import java.io.Serializable;
-
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,8 +30,8 @@ public class ModifyUser extends UserDTO {
 
     public void initialize() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest req = (HttpServletRequest) context
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final HttpServletRequest req = (HttpServletRequest) context
                     .getExternalContext().getRequest();
 
             ums.fill(req, this);
@@ -50,14 +45,14 @@ public class ModifyUser extends UserDTO {
      */
 
     public String modify() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context
+        final FacesContext context = FacesContext.getCurrentInstance();
+        final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
 
         // TODO Validate data!
 
         System.out.println("Modify: " + getId());
-        boolean result = ums.modify(this, req);
+        final boolean result = ums.modify(this, req);
 
         if (result) {
             return "mainpage";
@@ -72,11 +67,11 @@ public class ModifyUser extends UserDTO {
      */
 
     public String resend() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context
+        final FacesContext context = FacesContext.getCurrentInstance();
+        final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
 
-        boolean result = ums.sendVerificationEmail(req);
+        final boolean result = ums.sendVerificationEmail(req);
 
         if (result) {
             return "mainpage";

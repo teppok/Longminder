@@ -1,10 +1,12 @@
 package fi.iki.photon.longminder.entity;
 
-import fi.iki.photon.longminder.entity.User;
 import java.io.Serializable;
-import java.lang.String;
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Entity implementation class for Entity LoginData
@@ -29,18 +31,18 @@ public class LoginData implements Serializable {
     }
 
     public String getLoginkey() {
-        return this.loginkey;
+        return loginkey;
     }
 
-    public void setLoginkey(String loginkey) {
+    public void setLoginkey(final String loginkey) {
         this.loginkey = loginkey;
     }
 
     public Date getIssued() {
-        return this.issued == null ? null : (Date) issued.clone();
+        return issued == null ? null : (Date) issued.clone();
     }
 
-    public void setIssued(Date issued) {
+    public void setIssued(final Date issued) {
         this.issued = (issued == null ? null : (Date) issued.clone());
     }
 

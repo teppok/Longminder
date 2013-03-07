@@ -1,8 +1,5 @@
 package fi.iki.photon.longminder.web;
 
-import java.io.IOException;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -10,12 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.PhaseEvent;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-
-import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 /**
  * A backing bean storing login information for the user.
@@ -52,10 +44,10 @@ public class LoginDTO {
     @PostConstruct
     public void initLogin() {
         System.out.println("Init login!");
-        HttpServletRequest req = (HttpServletRequest) FacesContext
+        final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
 
-        String key = req.getParameter("key");
+        final String key = req.getParameter("key");
         if (key != null) {
             System.out.println("Login with key: " + key);
             if (!ums.loginWithKey(key, req)) {
@@ -81,8 +73,8 @@ public class LoginDTO {
      * 
      * @param cse
      */
-    public void checkLoginOnLoginPage(ComponentSystemEvent cse) {
-        FacesContext context = FacesContext.getCurrentInstance();
+    public void checkLoginOnLoginPage(final ComponentSystemEvent cse) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (isAuthorized()) {
             context.getApplication().getNavigationHandler()
                     .handleNavigation(context, null, "mainpage");
@@ -95,9 +87,9 @@ public class LoginDTO {
      * 
      * @param cse
      */
-    public void checkLogin(ComponentSystemEvent cse) {
+    public void checkLogin(final ComponentSystemEvent cse) {
         System.out.println("CHECK LOGIN");
-        FacesContext context = FacesContext.getCurrentInstance();
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (!isAuthorized()) {
             System.out.println("NO LOGIN");
             context.getApplication().getNavigationHandler()
@@ -111,12 +103,12 @@ public class LoginDTO {
      * 
      * @param cse
      */
-    public void verify(ComponentSystemEvent cse) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context
+    public void verify(final ComponentSystemEvent cse) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
 
-        String key = req.getParameter("key");
+        final String key = req.getParameter("key");
         if (key != null) {
             verified = ums.verify(key);
         }
@@ -131,13 +123,13 @@ public class LoginDTO {
 
     public String login() {
 
-        HttpServletRequest req = (HttpServletRequest) FacesContext
+        final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
 
-        boolean r = ums.login(email, password, req);
+        final boolean r = ums.login(email, password, req);
 
         if (!r) {
-            FacesMessage msg = new FacesMessage("Login failed");
+            final FacesMessage msg = new FacesMessage("Login failed");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
@@ -152,8 +144,8 @@ public class LoginDTO {
      */
 
     public String logout() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context
+        final FacesContext context = FacesContext.getCurrentInstance();
+        final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
         ums.logout(req);
         return "login";
@@ -163,7 +155,7 @@ public class LoginDTO {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -171,7 +163,7 @@ public class LoginDTO {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -179,7 +171,7 @@ public class LoginDTO {
         return verified;
     }
 
-    public void setVerified(boolean verified) {
+    public void setVerified(final boolean verified) {
         this.verified = verified;
     }
 
@@ -187,7 +179,7 @@ public class LoginDTO {
         return authorized;
     }
 
-    public void setAuthorized(boolean authorized) {
+    public void setAuthorized(final boolean authorized) {
         this.authorized = authorized;
     }
 }

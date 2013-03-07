@@ -1,13 +1,13 @@
 package fi.iki.photon.longminder.entity;
 
-import fi.iki.photon.longminder.entity.Repeat;
-import fi.iki.photon.longminder.entity.dto.AlertDTO;
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
 /**
  * Entity implementation class for Entity: DayRepeat
@@ -32,7 +32,7 @@ public class DayRepeat extends Repeat implements Serializable {
      * @param dto
      */
 
-    public DayRepeat(AlertDTO dto) {
+    public DayRepeat(final AlertDTO dto) {
         super(dto);
         setDayDelay(dto.getDayDelay());
 
@@ -45,7 +45,8 @@ public class DayRepeat extends Repeat implements Serializable {
      *            AlertDTO to be initialized.
      * */
 
-    public void initializeDTO(AlertDTO dto) {
+    @Override
+    public void initializeDTO(final AlertDTO dto) {
         super.initializeDTO(dto);
         dto.setDayDelay(getDayDelay());
         dto.setRepeatType(AlertDTO.REPEAT_DAY);
@@ -58,8 +59,9 @@ public class DayRepeat extends Repeat implements Serializable {
      * @return Date instance representing the new time.
      */
 
-    public Date nextAlert(Date fromDate) {
-        Calendar alertCal = Calendar.getInstance();
+    @Override
+    public Date nextAlert(final Date fromDate) {
+        final Calendar alertCal = Calendar.getInstance();
         alertCal.setTime(fromDate);
         alertCal.add(Calendar.DAY_OF_MONTH, dayDelay);
         return alertCal.getTime();
@@ -69,7 +71,7 @@ public class DayRepeat extends Repeat implements Serializable {
         return dayDelay;
     }
 
-    public void setDayDelay(int dayDelay) {
+    public void setDayDelay(final int dayDelay) {
         this.dayDelay = dayDelay;
     }
 

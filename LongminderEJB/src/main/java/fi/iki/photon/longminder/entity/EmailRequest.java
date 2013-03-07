@@ -1,7 +1,11 @@
 package fi.iki.photon.longminder.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /**
  * Entity implementation class for Entity: EmailRequest
@@ -25,7 +29,7 @@ public class EmailRequest implements Serializable {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(final User owner) {
         this.owner = owner;
     }
 

@@ -1,26 +1,13 @@
 package fi.iki.photon.longminder.web;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.jws.WebService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -58,19 +45,21 @@ public class UserManagerService {
      * @return true if successful
      */
 
-    public boolean login(String name, String password, HttpServletRequest req) {
+    public boolean login(final String name, final String password,
+            final HttpServletRequest req) {
         System.out.println("Login: " + req.getRemoteUser() + " / "
                 + req.isUserInRole("USER"));
 
         if (req.getUserPrincipal() == null) {
 
             try {
-                UserDTO u = um.find(name);
-                if (u == null)
+                final UserDTO u = um.find(name);
+                if (u == null) {
                     return false;
+                }
 
                 req.login(name, DigestUtils.sha512Hex(u.getSalt() + password));
-            } catch (ServletException e) {
+            } catch (final ServletException e) {
                 return false;
             }
         }
@@ -89,7 +78,7 @@ public class UserManagerService {
      * @return true if successful
      */
 
-    public boolean register(UserDTO ud, HttpServletRequest req) {
+    public boolean register(final UserDTO ud, final HttpServletRequest req) {
 
         if (ud == null || ud.getEmail() == null || ud.getPassword1() == null
                 || ud.getEmail().length() == 0) {
@@ -98,11 +87,12 @@ public class UserManagerService {
         System.out.println("Registering " + ud.getEmail() + " "
                 + ud.getPassword1());
 
-        UserDTO existingUser = um.find(ud.getEmail());
-        if (existingUser != null)
+        final UserDTO existingUser = um.find(ud.getEmail());
+        if (existingUser != null) {
             return false;
+        }
 
-        List<String> groups = new ArrayList<String>();
+        final List<String> groups = new ArrayList<String>();
         groups.add("USER");
         ud.setGroups(groups);
 
@@ -116,7 +106,7 @@ public class UserManagerService {
 
         System.out.println("" + ud.getId() + "-e-" + ud.getEmail());
 
-        boolean result = login(ud.getEmail(), ud.getPassword1(), req);
+        final boolean result = login(ud.getEmail(), ud.getPassword1(), req);
 
         sendVerificationEmail(req);
 
@@ -130,12 +120,12 @@ public class UserManagerService {
      * @return true if successful
      */
 
-    public boolean logout(HttpServletRequest req) {
+    public boolean logout(final HttpServletRequest req) {
         if (req.getUserPrincipal() != null) {
             try {
                 req.logout();
                 req.getSession().invalidate();
-            } catch (ServletException e) {
+            } catch (final ServletException e) {
                 // Do nothing in case of failure
             }
 
@@ -152,17 +142,18 @@ public class UserManagerService {
      * @return true if successful.
      */
 
-    public boolean loginWithKey(String key, HttpServletRequest req) {
+    public boolean loginWithKey(final String key, final HttpServletRequest req) {
         if (req.getUserPrincipal() == null) {
-            UserDTO ud = um.findWithLoginKey(key);
+            final UserDTO ud = um.findWithLoginKey(key);
 
-            if (ud == null)
+            if (ud == null) {
                 return false;
+            }
 
             try {
                 req.login(ud.getEmail(), ud.getReturnPassword());
                 ud.setReturnPassword(null);
-            } catch (ServletException e) {
+            } catch (final ServletException e) {
                 return false;
             }
             return true;
@@ -178,7 +169,7 @@ public class UserManagerService {
      * @return true if successful
      */
 
-    public boolean verify(String key) {
+    public boolean verify(final String key) {
         return um.verify(key);
     }
 
@@ -195,14 +186,16 @@ public class UserManagerService {
      * @return true if successful
      */
 
-    public boolean modify(UserDTO modifyUser, HttpServletRequest req) {
-        String oldLoginName = req.getRemoteUser();
-        if (oldLoginName == null || !oldLoginName.equals(modifyUser.getEmail()))
+    public boolean modify(final UserDTO modifyUser, final HttpServletRequest req) {
+        final String oldLoginName = req.getRemoteUser();
+        if (oldLoginName == null || !oldLoginName.equals(modifyUser.getEmail())) {
             return false;
+        }
 
-        boolean result = um.updateUser(oldLoginName, modifyUser);
-        if (result == false)
+        final boolean result = um.updateUser(oldLoginName, modifyUser);
+        if (result == false) {
             return false;
+        }
 
         if (!oldLoginName.equals(modifyUser.getEmail())) {
             try {
@@ -212,7 +205,7 @@ public class UserManagerService {
                 System.out.println(modifyUser.getReturnPassword());
                 req.login(modifyUser.getEmail(), modifyUser.getReturnPassword());
                 modifyUser.setReturnPassword(null);
-            } catch (ServletException e) {
+            } catch (final ServletException e) {
                 return false;
             }
         }
@@ -227,7 +220,7 @@ public class UserManagerService {
      * @param modifyUser
      */
 
-    public void fill(HttpServletRequest req, UserDTO modifyUser) {
+    public void fill(final HttpServletRequest req, final UserDTO modifyUser) {
         um.fill(req.getRemoteUser(), modifyUser);
 
     }
@@ -238,9 +231,9 @@ public class UserManagerService {
      * @param req
      */
 
-    public boolean sendVerificationEmail(HttpServletRequest req) {
-        String serverBase = req.getScheme() + "://" + req.getServerName() + ":"
-                + req.getServerPort() + "/" + req.getContextPath();
+    public boolean sendVerificationEmail(final HttpServletRequest req) {
+        final String serverBase = req.getScheme() + "://" + req.getServerName()
+                + ":" + req.getServerPort() + "/" + req.getContextPath();
         return emm.requestVerificationEmail(serverBase, req.getRemoteUser());
     }
 

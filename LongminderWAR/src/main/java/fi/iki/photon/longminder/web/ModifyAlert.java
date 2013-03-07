@@ -1,16 +1,10 @@
 package fi.iki.photon.longminder.web;
 
-import java.io.Serializable;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.PhaseEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
@@ -37,9 +31,9 @@ public class ModifyAlert extends AlertDTO {
      * @param cse
      */
 
-    public void initialize(ComponentSystemEvent cse) {
+    public void initialize(final ComponentSystemEvent cse) {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            HttpServletRequest req = (HttpServletRequest) FacesContext
+            final HttpServletRequest req = (HttpServletRequest) FacesContext
                     .getCurrentInstance().getExternalContext().getRequest();
 
             System.out.println("INIT ALERT");
@@ -56,15 +50,16 @@ public class ModifyAlert extends AlertDTO {
      */
 
     public String modify() {
-        HttpServletRequest req = (HttpServletRequest) FacesContext
+        final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
 
         // TODO Validate input!
 
-        boolean result = ams.modify(req, this);
+        final boolean result = ams.modify(req, this);
 
-        if (result)
+        if (result) {
             return "mainpage";
+        }
 
         return null;
     }

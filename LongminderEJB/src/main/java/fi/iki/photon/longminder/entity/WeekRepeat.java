@@ -1,13 +1,13 @@
 package fi.iki.photon.longminder.entity;
 
-import fi.iki.photon.longminder.entity.Repeat;
-import fi.iki.photon.longminder.entity.dto.AlertDTO;
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
 /**
  * Entity implementation class for Entity: WeekRepeat
@@ -33,14 +33,15 @@ public class WeekRepeat extends Repeat implements Serializable {
         super();
     }
 
-    public WeekRepeat(AlertDTO dto) {
+    public WeekRepeat(final AlertDTO dto) {
         super(dto);
 
         setWeekDelay(dto.getWeekDelay());
         setAlertWeekDay(dto.getAlertWeekDay());
     }
 
-    public void initializeDTO(AlertDTO dto) {
+    @Override
+    public void initializeDTO(final AlertDTO dto) {
         super.initializeDTO(dto);
         dto.setWeekDelay(getWeekDelay());
         dto.setAlertWeekDay(getAlertWeekDay());
@@ -51,7 +52,7 @@ public class WeekRepeat extends Repeat implements Serializable {
         return weekDelay;
     }
 
-    public void setWeekDelay(int weekDelay) {
+    public void setWeekDelay(final int weekDelay) {
         this.weekDelay = weekDelay;
     }
 
@@ -59,19 +60,21 @@ public class WeekRepeat extends Repeat implements Serializable {
         return alertWeekDay;
     }
 
-    public void setAlertWeekDay(int alertWeekDay) {
+    public void setAlertWeekDay(final int alertWeekDay) {
         this.alertWeekDay = alertWeekDay;
     }
 
     // TODO Internationalize date calculation.
 
-    public Date nextAlert(Date fromDate) {
-        Calendar alertCal = Calendar.getInstance();
+    @Override
+    public Date nextAlert(final Date fromDate) {
+        final Calendar alertCal = Calendar.getInstance();
         alertCal.setTime(fromDate);
         // Returns 1 = sunday, 7 = saturday
         int dayOfWeek = alertCal.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == 1)
+        if (dayOfWeek == 1) {
             dayOfWeek = 8;
+        }
         dayOfWeek = dayOfWeek - 2;
         // Now monday = 0, sunday = 6
         alertCal.add(Calendar.DAY_OF_MONTH, (7 - dayOfWeek));

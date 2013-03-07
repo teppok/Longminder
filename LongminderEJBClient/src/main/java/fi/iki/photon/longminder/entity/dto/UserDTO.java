@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder.entity.dto;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public class UserDTO {
         return password1;
     }
 
-    public void setPassword1(String password1) {
+    public void setPassword1(final String password1) {
         this.password1 = password1;
         if (password1 != null && password1.length() == 0) {
             this.password1 = null;
@@ -55,7 +54,7 @@ public class UserDTO {
         return password2;
     }
 
-    public void setPassword2(String password2) {
+    public void setPassword2(final String password2) {
         this.password2 = password2;
         if (password2 != null && password2.length() == 0) {
             this.password2 = null;
@@ -66,7 +65,7 @@ public class UserDTO {
         return first;
     }
 
-    public void setFirst(String first) {
+    public void setFirst(final String first) {
         this.first = first;
         if (first != null && first.length() == 0) {
             this.first = null;
@@ -77,7 +76,7 @@ public class UserDTO {
         return last;
     }
 
-    public void setLast(String last) {
+    public void setLast(final String last) {
         this.last = last;
         if (last != null && last.length() == 0) {
             this.last = null;
@@ -88,7 +87,7 @@ public class UserDTO {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
         if (email != null && email.length() == 0) {
             this.email = null;
@@ -99,7 +98,7 @@ public class UserDTO {
         return salt;
     }
 
-    public void setSalt(String salt) {
+    public void setSalt(final String salt) {
         this.salt = salt;
     }
 
@@ -107,7 +106,7 @@ public class UserDTO {
         return groups;
     }
 
-    public void setGroups(List<String> groups) {
+    public void setGroups(final List<String> groups) {
         this.groups = groups;
     }
 
@@ -115,7 +114,7 @@ public class UserDTO {
         return returnPassword;
     }
 
-    public void setReturnPassword(String returnPassword) {
+    public void setReturnPassword(final String returnPassword) {
         this.returnPassword = returnPassword;
     }
 
@@ -123,7 +122,7 @@ public class UserDTO {
         return verified;
     }
 
-    public void setVerified(boolean verified) {
+    public void setVerified(final boolean verified) {
         this.verified = verified;
     }
 
@@ -131,7 +130,7 @@ public class UserDTO {
         return oldPassword;
     }
 
-    public void setOldPassword(String oldPassword) {
+    public void setOldPassword(final String oldPassword) {
         this.oldPassword = oldPassword;
         if (oldPassword != null && oldPassword.length() == 0) {
             this.oldPassword = null;
@@ -142,7 +141,7 @@ public class UserDTO {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -150,7 +149,7 @@ public class UserDTO {
         return locale;
     }
 
-    public void setLocale(String locale) {
+    public void setLocale(final String locale) {
         this.locale = locale;
     }
 }

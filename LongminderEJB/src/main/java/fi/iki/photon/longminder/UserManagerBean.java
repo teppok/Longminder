@@ -1,11 +1,9 @@
 package fi.iki.photon.longminder;
 
-import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -44,6 +42,7 @@ public class UserManagerBean implements UserManager {
 
     /** Simple ping for testing. */
 
+    @Override
     public String hello() {
         return "Usermanager says Hello!";
     }
@@ -55,17 +54,20 @@ public class UserManagerBean implements UserManager {
      * @return fail if User with the same email exists in the database already.
      */
 
+    @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public boolean create(UserDTO ud) {
-        if (ud == null)
+    public boolean create(final UserDTO ud) {
+        if (ud == null) {
             return false;
+        }
 
-        User utmp = findTrueUserForEmail(ud.getEmail());
+        final User utmp = findTrueUserForEmail(ud.getEmail());
 
-        if (utmp != null)
+        if (utmp != null) {
             return false;
+        }
 
-        User u = new User();
+        final User u = new User();
         u.initialize(ud);
 
         em.persist(u);
@@ -86,20 +88,21 @@ public class UserManagerBean implements UserManager {
      */
 
     @Override
-    public UserDTO find(String email) {
-        User u = findTrueUserForEmail(email);
-        if (u == null)
+    public UserDTO find(final String email) {
+        final User u = findTrueUserForEmail(email);
+        if (u == null) {
             return null;
+        }
 
-        UserDTO ud = new UserDTO();
+        final UserDTO ud = new UserDTO();
         u.initializeDTO(ud);
         return ud;
     }
 
     /** Given an email, returns an User instance with this Email. */
 
-    public User findTrueUserForEmail(String email) {
-        List<User> users = em
+    public User findTrueUserForEmail(final String email) {
+        final List<User> users = em
                 .createQuery("SELECT u FROM User u WHERE u.email LIKE ?1",
                         User.class).setParameter(1, email).getResultList();
 
@@ -112,7 +115,7 @@ public class UserManagerBean implements UserManager {
     /** Returns a list of all users whose emails have been verified to work. */
 
     public List<User> getVerifiedUsers() {
-        TypedQuery<User> result = em.createQuery(
+        final TypedQuery<User> result = em.createQuery(
                 "SELECT u FROM User u WHERE u.verified = true", User.class);
         return result.getResultList();
     }
@@ -121,9 +124,10 @@ public class UserManagerBean implements UserManager {
      * Removes an user with the given email.
      * */
 
+    @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void remove(String email) {
-        User u = findTrueUserForEmail(email);
+    public void remove(final String email) {
+        final User u = findTrueUserForEmail(email);
 
         if (u != null) {
             em.remove(u);
@@ -133,7 +137,7 @@ public class UserManagerBean implements UserManager {
     /** Returns a list of all users. */
 
     public List<User> findAll() {
-        TypedQuery<User> result = em.createQuery("SELECT u FROM User u",
+        final TypedQuery<User> result = em.createQuery("SELECT u FROM User u",
                 User.class);
         return result.getResultList();
     }
@@ -142,7 +146,7 @@ public class UserManagerBean implements UserManager {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void removeAll() {
-        for (User u : findAll()) {
+        for (final User u : findAll()) {
             em.remove(u);
         }
     }
@@ -155,15 +159,15 @@ public class UserManagerBean implements UserManager {
      * @return LoginData containing the generated temporary key.
      */
 
-    public LoginData createLogin(User u) {
+    public LoginData createLogin(final User u) {
 
-        LoginData newLogin = new LoginData();
+        final LoginData newLogin = new LoginData();
 
         boolean doAgain = true;
         String random = null;
         while (doAgain) {
-            random = generateRandomString(32);
-            LoginData tmp = em.find(LoginData.class, random);
+            random = UserManagerBean.generateRandomString(32);
+            final LoginData tmp = em.find(LoginData.class, random);
             if (tmp == null) {
                 doAgain = false;
             }
@@ -188,12 +192,13 @@ public class UserManagerBean implements UserManager {
      * @return Random salt string of length length
      */
 
-    public static String generateRandomString(int length) {
-        char[] salt = new char[length];
-        SecureRandom random = new SecureRandom();
+    public static String generateRandomString(final int length) {
+        final char[] salt = new char[length];
+        final SecureRandom random = new SecureRandom();
 
         for (int i = 0; i < salt.length; i++) {
-            salt[i] = characters[random.nextInt(characters.length)];
+            salt[i] = UserManagerBean.characters[random
+                    .nextInt(UserManagerBean.characters.length)];
         }
 
         return new String(salt);
@@ -206,16 +211,16 @@ public class UserManagerBean implements UserManager {
      */
 
     @Override
-    public UserDTO findWithLoginKey(String key) {
-        List<User> users = em
+    public UserDTO findWithLoginKey(final String key) {
+        final List<User> users = em
                 .createQuery(
                         "SELECT u FROM User u JOIN u.logins l WHERE l.loginkey LIKE ?1",
                         User.class).setParameter(1, key).getResultList();
 
         if (users.size() > 0) {
-            User u = users.get(0);
+            final User u = users.get(0);
             // u.setVerified(true);
-            UserDTO ud = new UserDTO();
+            final UserDTO ud = new UserDTO();
             u.initializeDTO(ud);
             return ud;
         }
@@ -226,14 +231,15 @@ public class UserManagerBean implements UserManager {
      * Given a temporary login key, verifies that this user's email is verified.
      */
 
-    public boolean verify(String key) {
-        List<User> users = em
+    @Override
+    public boolean verify(final String key) {
+        final List<User> users = em
                 .createQuery(
                         "SELECT u FROM User u JOIN u.logins l WHERE l.loginkey LIKE ?1",
                         User.class).setParameter(1, key).getResultList();
 
         if (users.size() > 0) {
-            User u = users.get(0);
+            final User u = users.get(0);
             u.setVerified(true);
             return true;
         }
@@ -250,11 +256,12 @@ public class UserManagerBean implements UserManager {
      * @return true if the password matches.
      */
 
-    private boolean verifyPassword(User u, String password) {
-        if (u == null)
+    private boolean verifyPassword(final User u, final String password) {
+        if (u == null) {
             return false;
+        }
 
-        String pwHash = DigestUtils.sha512Hex(u.getSalt() + password);
+        final String pwHash = DigestUtils.sha512Hex(u.getSalt() + password);
 
         if (pwHash.equals(u.getPassword())) {
             return true;
@@ -276,18 +283,21 @@ public class UserManagerBean implements UserManager {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
-    public boolean updateUser(String email, UserDTO ud) {
-        if (ud == null || email == null)
+    public boolean updateUser(final String email, final UserDTO ud) {
+        if (ud == null || email == null) {
             return false;
+        }
 
-        User tmpUser = findTrueUserForEmail(ud.getEmail());
-        if (tmpUser != null)
+        final User tmpUser = findTrueUserForEmail(ud.getEmail());
+        if (tmpUser != null) {
             return false;
+        }
 
-        User u = findTrueUserForEmail(email);
+        final User u = findTrueUserForEmail(email);
 
-        if (u == null)
+        if (u == null) {
             return false;
+        }
 
         System.out.println("Updateuser: " + u.getEmail());
 
@@ -313,8 +323,8 @@ public class UserManagerBean implements UserManager {
      */
 
     @Override
-    public void fill(String email, UserDTO ud) {
-        User u = findTrueUserForEmail(email);
+    public void fill(final String email, final UserDTO ud) {
+        final User u = findTrueUserForEmail(email);
 
         if (u != null) {
             u.initializeDTO(ud);

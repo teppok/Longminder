@@ -1,7 +1,5 @@
 package fi.iki.photon.longminder.web;
 
-import java.io.Serializable;
-
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -32,18 +30,18 @@ public class NewUser extends UserDTO {
      */
 
     public String register() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest req = (HttpServletRequest) context
+        final FacesContext context = FacesContext.getCurrentInstance();
+        final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
 
         // TODO Validate input!
 
-        boolean result = ums.register(this, req);
+        final boolean result = ums.register(this, req);
 
         if (result) {
             return "mainpage";
         }
-        FacesMessage msg = new FacesMessage("Registration failed.");
+        final FacesMessage msg = new FacesMessage("Registration failed.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
         return null;
     }

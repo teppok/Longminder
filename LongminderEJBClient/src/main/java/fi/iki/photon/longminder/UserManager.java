@@ -1,7 +1,6 @@
 package fi.iki.photon.longminder;
 
 import javax.ejb.Local;
-import javax.ejb.Remote;
 
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 

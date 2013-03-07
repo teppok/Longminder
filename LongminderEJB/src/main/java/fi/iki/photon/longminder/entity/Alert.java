@@ -1,17 +1,22 @@
 package fi.iki.photon.longminder.entity;
 
 import java.io.Serializable;
-
-import javax.ejb.EJB;
-import javax.persistence.*;
-
-import fi.iki.photon.longminder.UserManager;
-import fi.iki.photon.longminder.UserManagerBean;
-import fi.iki.photon.longminder.entity.dto.AlertDTO;
-
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
 /**
  * The persistent class for the ALERT database table.
@@ -58,7 +63,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     protected Alert() {
     }
 
-    public Alert(AlertDTO dto) {
+    public Alert(final AlertDTO dto) {
         initialize(dto);
     }
 
@@ -69,7 +74,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
      * @param dto
      */
 
-    public void initialize(AlertDTO dto) {
+    public void initialize(final AlertDTO dto) {
         setDescription(dto.getDescription());
         setNextAlert(dto.getNextAlert());
         setOneOff(dto.isOneOff());
@@ -78,16 +83,16 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
         setDismissed(false);
 
         if (dto.getRepeatType() == AlertDTO.REPEAT_NO) {
-            this.setRepeat(null);
+            setRepeat(null);
         }
 
         if (dto.getRepeatType() == AlertDTO.REPEAT_DAY) {
-            DayRepeat drep = new DayRepeat(dto);
-            this.setRepeat(drep);
+            final DayRepeat drep = new DayRepeat(dto);
+            setRepeat(drep);
         }
         if (dto.getRepeatType() == AlertDTO.REPEAT_WEEK) {
-            WeekRepeat wrep = new WeekRepeat(dto);
-            this.setRepeat(wrep);
+            final WeekRepeat wrep = new WeekRepeat(dto);
+            setRepeat(wrep);
         }
     }
 
@@ -97,7 +102,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
      * @param a
      */
 
-    public void initializeDTO(AlertDTO a) {
+    public void initializeDTO(final AlertDTO a) {
         a.setId(getId());
         a.setDescription(getDescription());
         a.setNextAlert(getNextAlert());
@@ -123,24 +128,24 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
 
     public Alert rotateAlert() {
 
-        Repeat r = getRepeat();
+        final Repeat r = getRepeat();
         if (r != null) {
-            Date nextRepeat = getRepeat().nextAlert(getNextAlert());
+            final Date nextRepeat = getRepeat().nextAlert(getNextAlert());
             if (r.isRepeatsLeft(nextRepeat)) {
-                Alert newAlert = new Alert();
+                final Alert newAlert = new Alert();
                 newAlert.setDescription(getDescription());
                 newAlert.setNextAlert(nextRepeat);
                 newAlert.setOneOff(isOneOff());
                 newAlert.setDismissed(isDismissed());
 
                 if (r.getRepeatTimes() != null) {
-                    r.setRepeatTimes(Integer.valueOf(
-                            r.getRepeatTimes().intValue() - 1));
+                    r.setRepeatTimes(Integer.valueOf(r.getRepeatTimes()
+                            .intValue() - 1));
                 }
                 newAlert.setRepeat(r);
 
-                List<Alert> linked = newAlert.getLinkedAlerts();
-                
+                final List<Alert> linked = newAlert.getLinkedAlerts();
+
                 linked.add(newAlert);
 
                 setRepeat(null);
@@ -153,26 +158,26 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     }
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
     public Date getNextAlert() {
-        return this.nextAlert == null ? null : (Date) nextAlert.clone();
+        return nextAlert == null ? null : (Date) nextAlert.clone();
     }
 
-    public void setNextAlert(Date nextAlert) {
+    public void setNextAlert(final Date nextAlert) {
         this.nextAlert = (nextAlert == null ? null : (Date) nextAlert.clone());
     }
 
@@ -180,7 +185,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
         return repeat;
     }
 
-    public void setRepeat(Repeat repeat) {
+    public void setRepeat(final Repeat repeat) {
         this.repeat = repeat;
     }
 
@@ -188,7 +193,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
         return oneOff;
     }
 
-    public void setOneOff(boolean oneOff) {
+    public void setOneOff(final boolean oneOff) {
         this.oneOff = oneOff;
     }
 
@@ -196,7 +201,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
         return linkedAlerts;
     }
 
-    public void setLinkedAlerts(List<Alert> linkedAlerts) {
+    public void setLinkedAlerts(final List<Alert> linkedAlerts) {
         this.linkedAlerts = linkedAlerts;
     }
 
@@ -204,7 +209,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
         return dismissed;
     }
 
-    public void setDismissed(boolean dismissed) {
+    public void setDismissed(final boolean dismissed) {
         this.dismissed = dismissed;
     }
 
@@ -212,7 +217,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
         return fired;
     }
 
-    public void setFired(boolean fired) {
+    public void setFired(final boolean fired) {
         this.fired = fired;
     }
 }

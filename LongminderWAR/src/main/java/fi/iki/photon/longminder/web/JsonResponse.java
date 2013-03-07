@@ -27,7 +27,7 @@ public class JsonResponse {
     public JsonResponse() {
     }
 
-    public JsonResponse(String status) {
+    public JsonResponse(final String status) {
         this.status = status;
     }
 
@@ -40,7 +40,7 @@ public class JsonResponse {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -48,7 +48,7 @@ public class JsonResponse {
         return errorMsg;
     }
 
-    public void setErrorMsg(String errorMsg) {
+    public void setErrorMsg(final String errorMsg) {
         this.errorMsg = errorMsg;
     }
 
@@ -56,7 +56,7 @@ public class JsonResponse {
         return fieldErrors;
     }
 
-    public void setFieldErrors(Map<String, Object> fieldErrors) {
+    public void setFieldErrors(final Map<String, Object> fieldErrors) {
         this.fieldErrors = fieldErrors;
     }
 
@@ -64,7 +64,7 @@ public class JsonResponse {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(final Object data) {
         this.data = data;
     }
 

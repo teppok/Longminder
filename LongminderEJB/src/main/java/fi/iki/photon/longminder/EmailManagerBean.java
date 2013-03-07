@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +25,6 @@ import javax.persistence.PersistenceContext;
 import fi.iki.photon.longminder.entity.Alert;
 import fi.iki.photon.longminder.entity.EmailRequest;
 import fi.iki.photon.longminder.entity.User;
-import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 /**
  * Session Bean implementation class EmailManagerBean
@@ -46,7 +44,7 @@ public class EmailManagerBean implements EmailManager {
     @Resource(name = "mail/longminderMail")
     private Session mailSession;
 
-    private boolean ignoreEmail = true;
+    private final boolean ignoreEmail = true;
 
     // TODO Get serverBase from JDNI or something, instead of a parameter to
     // request.
@@ -60,16 +58,19 @@ public class EmailManagerBean implements EmailManager {
     }
 
     @Override
-    public boolean requestVerificationEmail(String server, String email) {
-        this.serverBase = server;
+    public boolean requestVerificationEmail(final String server,
+            final String email) {
+        serverBase = server;
 
-        User u = um.findTrueUserForEmail(email);
+        final User u = um.findTrueUserForEmail(email);
 
         // Test if we already have requested a verification.
-        EmailRequest test = em.find(EmailRequest.class, u);
-        if (test != null) return true;
-        
-        EmailRequest request = new EmailRequest();
+        final EmailRequest test = em.find(EmailRequest.class, u);
+        if (test != null) {
+            return true;
+        }
+
+        final EmailRequest request = new EmailRequest();
         request.setOwner(u);
 
         em.persist(request);
@@ -78,16 +79,16 @@ public class EmailManagerBean implements EmailManager {
 
     /** Sends a verification email to the specified email. */
 
-    public boolean sendVerificationEmail(String email) {
+    public boolean sendVerificationEmail(final String email) {
         try {
-            User u = um.findTrueUserForEmail(email);
+            final User u = um.findTrueUserForEmail(email);
             um.createLogin(u);
             if (u.getLogins() == null || u.getLogins().size() == 0) {
                 throw new Error("Login key should have been created.");
             }
-            String key = u.getLogins().get(0).getLoginkey();
+            final String key = u.getLogins().get(0).getLoginkey();
 
-            Message msg = new MimeMessage(mailSession);
+            final Message msg = new MimeMessage(mailSession);
             msg.setFrom(new InternetAddress("noreply@example.com"));
             msg.setRecipient(Message.RecipientType.TO,
                     new InternetAddress(u.getEmail()));
@@ -105,7 +106,7 @@ public class EmailManagerBean implements EmailManager {
 
             Transport.send(msg);
 
-        } catch (MessagingException e) {
+        } catch (final MessagingException e) {
             e.printStackTrace();
             return false;
         }
@@ -119,27 +120,27 @@ public class EmailManagerBean implements EmailManager {
     @Schedule(minute = "*", hour = "*")
     public void sendEmails() {
         System.out.println("Send emails!");
-        List<User> users = um.getVerifiedUsers();
+        final List<User> users = um.getVerifiedUsers();
 
-        for (User u : users) {
+        for (final User u : users) {
             sendAlertEmail(u);
         }
 
         if (serverBase != null) {
-            List<EmailRequest> requests = em.createQuery(
+            final List<EmailRequest> requests = em.createQuery(
                     "SELECT r FROM EmailRequest r", EmailRequest.class)
                     .getResultList();
 
-            for (EmailRequest e : requests) {
+            for (final EmailRequest e : requests) {
                 sendVerificationEmail(e.getOwner().getEmail());
                 em.remove(e);
             }
         }
     }
 
-    private void sendAlertEmail(User u) {
+    private void sendAlertEmail(final User u) {
         try {
-            String alertString = getAlertEmailString(u);
+            final String alertString = getAlertEmailString(u);
 
             if (alertString == null) {
                 System.out.println("Skipping " + u.getEmail());
@@ -149,7 +150,7 @@ public class EmailManagerBean implements EmailManager {
             if (ignoreEmail) {
                 System.out.println(alertString);
 
-                Calendar alertCal = Calendar.getInstance();
+                final Calendar alertCal = Calendar.getInstance();
                 alertCal.setTime(new Date());
                 alertCal.add(Calendar.DAY_OF_MONTH, 3);
                 u.setNextEmail(alertCal.getTime());
@@ -157,7 +158,7 @@ public class EmailManagerBean implements EmailManager {
                 return;
             }
 
-            Message msg = new MimeMessage(mailSession);
+            final Message msg = new MimeMessage(mailSession);
             msg.setFrom(new InternetAddress("noreply@example.com"));
             msg.setRecipient(Message.RecipientType.TO,
                     new InternetAddress(u.getEmail()));
@@ -168,36 +169,37 @@ public class EmailManagerBean implements EmailManager {
 
             Transport.send(msg);
 
-            Calendar alertCal = Calendar.getInstance();
+            final Calendar alertCal = Calendar.getInstance();
             alertCal.setTime(new Date());
             alertCal.add(Calendar.DAY_OF_MONTH, 3);
             u.setNextEmail(alertCal.getTime());
 
-        } catch (MessagingException e) {
+        } catch (final MessagingException e) {
             e.printStackTrace();
         }
     }
 
-    private String getAlertEmailString(User u) {
-        List<Alert> alerts = am.getRawAlertsForEmail(u.getEmail());
+    private String getAlertEmailString(final User u) {
+        final List<Alert> alerts = am.getRawAlertsForEmail(u.getEmail());
 
-        if (alerts == null || alerts.size() == 0)
+        if (alerts == null || alerts.size() == 0) {
             return null;
+        }
 
         boolean alertsFired = false;
 
-        ResourceBundle res = ResourceBundle
+        final ResourceBundle res = ResourceBundle
                 .getBundle("fi.iki.photon.longminder.Messages");
 
-        StringBuffer alertString = new StringBuffer();
+        final StringBuffer alertString = new StringBuffer();
         alertString.append(res.getString("email.greeting") + " "
                 + u.getFirstname() + ", \n\n"
                 + res.getString("email.alertsdue") + ":\n\n");
-        Date now = new Date();
-        DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM,
+        final Date now = new Date();
+        final DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 new Locale(u.getLocale().substring(0, 2)));
 
-        List<Alert> newAlertList = new ArrayList<Alert>();
+        final List<Alert> newAlertList = new ArrayList<Alert>();
 
         boolean newAlertsEncountered = false;
 
@@ -214,7 +216,7 @@ public class EmailManagerBean implements EmailManager {
                             + format.format(a.getNextAlert()) + "\n");
 
                     alertsFired = true;
-                    Alert newAlert = a.rotateAlert();
+                    final Alert newAlert = a.rotateAlert();
 
                     if (!a.isFired()) {
                         newAlertsEncountered = true;
@@ -234,8 +236,9 @@ public class EmailManagerBean implements EmailManager {
 
         alertString.append("\n" + res.getString("email.ending"));
 
-        if (!alertsFired)
+        if (!alertsFired) {
             return null;
+        }
 
         // If no unfired alerts and next email date is not met, skip sending.
         if (!newAlertsEncountered && u.getNextEmail().after(now)) {

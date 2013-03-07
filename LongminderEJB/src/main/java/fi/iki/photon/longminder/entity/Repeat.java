@@ -3,7 +3,18 @@ package fi.iki.photon.longminder.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
@@ -46,7 +57,7 @@ abstract public class Repeat implements Serializable {
      * @param dto
      */
 
-    public Repeat(AlertDTO dto) {
+    public Repeat(final AlertDTO dto) {
         setRepeatUntil(dto.getRepeatUntil());
         setRepeatTimes(dto.getRepeatTimes());
     }
@@ -57,7 +68,7 @@ abstract public class Repeat implements Serializable {
      * @param dto
      */
 
-    public void initializeDTO(AlertDTO dto) {
+    public void initializeDTO(final AlertDTO dto) {
         dto.setRepeatUntil(getRepeatUntil());
         dto.setRepeatTimes(getRepeatTimes());
     }
@@ -69,13 +80,16 @@ abstract public class Repeat implements Serializable {
      * @return true if repeats left.
      */
 
-    public boolean isRepeatsLeft(Date nextRepeat) {
-        if (repeatTimes == null && repeatUntil == null)
+    public boolean isRepeatsLeft(final Date nextRepeat) {
+        if (repeatTimes == null && repeatUntil == null) {
             return true;
-        if (repeatTimes != null && repeatTimes.intValue() == 0)
+        }
+        if (repeatTimes != null && repeatTimes.intValue() == 0) {
             return false;
-        if (repeatUntil != null && nextRepeat.after(repeatUntil))
+        }
+        if (repeatUntil != null && nextRepeat.after(repeatUntil)) {
             return false;
+        }
         return true;
     }
 
@@ -83,7 +97,7 @@ abstract public class Repeat implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -91,7 +105,7 @@ abstract public class Repeat implements Serializable {
         return repeatTimes;
     }
 
-    public void setRepeatTimes(Integer repeatTimes) {
+    public void setRepeatTimes(final Integer repeatTimes) {
         this.repeatTimes = repeatTimes;
     }
 
@@ -99,8 +113,9 @@ abstract public class Repeat implements Serializable {
         return repeatUntil == null ? null : (Date) repeatUntil.clone();
     }
 
-    public void setRepeatUntil(Date repeatUntil) {
-        this.repeatUntil = (repeatUntil == null ? null : (Date) repeatUntil.clone());
+    public void setRepeatUntil(final Date repeatUntil) {
+        this.repeatUntil = (repeatUntil == null ? null : (Date) repeatUntil
+                .clone());
     }
 
     abstract public Date nextAlert(Date fromDate);

@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder.web;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import fi.iki.photon.longminder.AlertManager;
 import fi.iki.photon.longminder.UserManager;
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
-import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 /**
  * Bottom layer class that mainly accesses AlertManager EJB. All methods take a
@@ -39,7 +37,7 @@ public class AlertManagerService {
      * @return true if success
      */
 
-    public boolean create(HttpServletRequest req, AlertDTO alert) {
+    public boolean create(final HttpServletRequest req, final AlertDTO alert) {
         return am.addAlert(req.getRemoteUser(), alert);
     }
 
@@ -53,7 +51,7 @@ public class AlertManagerService {
      * @return true if success
      */
 
-    public boolean modify(HttpServletRequest req, AlertDTO modify) {
+    public boolean modify(final HttpServletRequest req, final AlertDTO modify) {
         am.update(req.getRemoteUser(), modify);
 
         return true;
@@ -68,7 +66,7 @@ public class AlertManagerService {
      * @param adto
      */
 
-    public void fill(HttpServletRequest req, AlertDTO adto) {
+    public void fill(final HttpServletRequest req, final AlertDTO adto) {
         am.fill(req.getRemoteUser(), adto);
     }
 
@@ -79,7 +77,7 @@ public class AlertManagerService {
      * @return List of AlertDTO items
      */
 
-    public List<AlertDTO> getAlerts(HttpServletRequest req) {
+    public List<AlertDTO> getAlerts(final HttpServletRequest req) {
         return am.getAlerts(req.getRemoteUser());
     }
 
@@ -91,7 +89,7 @@ public class AlertManagerService {
      * @return List of AlertDTO items
      */
 
-    public List<AlertDTO> getAlertsForList(HttpServletRequest req) {
+    public List<AlertDTO> getAlertsForList(final HttpServletRequest req) {
         return am.getAlertsForList(req.getRemoteUser());
     }
 
@@ -103,7 +101,7 @@ public class AlertManagerService {
      * @return List of AlertDTO items
      */
 
-    public List<AlertDTO> getAlertsForHistory(HttpServletRequest req) {
+    public List<AlertDTO> getAlertsForHistory(final HttpServletRequest req) {
         return am.getAlertsForHistory(req.getRemoteUser());
     }
 
@@ -115,7 +113,7 @@ public class AlertManagerService {
      * @param id
      */
 
-    public void deleteAlert(HttpServletRequest req, int id) {
+    public void deleteAlert(final HttpServletRequest req, final int id) {
         am.remove(req.getRemoteUser(), id);
     }
 
@@ -127,7 +125,7 @@ public class AlertManagerService {
      * @param id
      */
 
-    public void dismiss(HttpServletRequest req, int id) {
+    public void dismiss(final HttpServletRequest req, final int id) {
         System.out.println("Dismiss");
         am.dismiss(req.getRemoteUser(), id);
     }

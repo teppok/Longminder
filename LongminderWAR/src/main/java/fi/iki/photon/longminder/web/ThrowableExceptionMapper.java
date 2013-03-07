@@ -17,19 +17,20 @@ public class ThrowableExceptionMapper implements ExceptionMapper<Throwable> {
     private static final JsonResponse JSON = new JsonResponse("ERROR");
 
     static {
-        RESPONSE = Response.status(500).entity(JSON).build();
+        RESPONSE = Response.status(500).entity(ThrowableExceptionMapper.JSON)
+                .build();
     }
 
     @Override
     @Produces(MediaType.APPLICATION_JSON)
-    public Response toResponse(Throwable ex) {
+    public Response toResponse(final Throwable ex) {
         System.out.println("ThrowableExceptionMapper: " + ex.getClass());
         ex.printStackTrace();
         // usually you don't pass detailed info out (don't do this here in
         // production environments)
-        JSON.setErrorMsg(ex.getMessage());
+        ThrowableExceptionMapper.JSON.setErrorMsg(ex.getMessage());
 
-        return RESPONSE;
+        return ThrowableExceptionMapper.RESPONSE;
     }
 
 }
