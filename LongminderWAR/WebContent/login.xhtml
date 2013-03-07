@@ -10,7 +10,9 @@ xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="./template.xhtml">
 
 <ui:define name="head">
-	<f:view beforePhase="#{loginDTO.checkLoginOnLogin}" />
+	<f:metadata>
+		<f:event listener="#{loginDTO.checkLoginOnLoginPage}" type="preRenderView" />
+	</f:metadata>
 </ui:define>
 
 <ui:define name="body">

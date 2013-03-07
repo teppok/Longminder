@@ -56,8 +56,8 @@ Upcoming alerts
 		<h:outputText value="Persistent" />
 	</f:facet>
 	<h:panelGroup rendered="#{!item.oneOff}">
-	<h:outputText value="Yes" rendered="#{(!item.past)}" />
-	<h:commandLink value="Dismiss" action="#{alertList.dismiss(item.id)}" rendered="#{item.past}" />
+	<h:outputText value="Yes" rendered="#{(item.dismissed or !item.fired)}" />
+	<h:commandLink value="Dismiss" action="#{alertList.dismiss(item.id)}" rendered="#{!item.dismissed and item.fired}" />
 	</h:panelGroup>
 </h:column>
 <h:column headerClass="listheader6">
@@ -69,7 +69,7 @@ Upcoming alerts
 </h:dataTable>
 </h:form>
 <h:form>
-<h:commandButton action="#{newAlert.show}" value="New alert" />
+<h:commandButton action="newalert" value="New alert" />
 </h:form>
 </ui:define>
 </ui:composition>

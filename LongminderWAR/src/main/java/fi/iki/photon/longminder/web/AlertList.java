@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,9 +33,11 @@ public class AlertList {
 	 */
 	
 	public void initialize() {
-		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		if (req != null) {
-			setAlerts(ams.getAlertsForList(req));
+		if (!FacesContext.getCurrentInstance().isPostback()) {
+			HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			if (req != null) {
+				setAlerts(ams.getAlertsForList(req));
+			}
 		}
 	}
 
@@ -45,6 +48,7 @@ public class AlertList {
 	 */
 	
 	public String deleteAlert(String id) {
+		System.out.println("Delete "+id);
 		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		
 		ams.deleteAlert(req, Integer.parseInt(id));
@@ -58,6 +62,7 @@ public class AlertList {
 	 */
 	
 	public String dismiss(String id) {
+		System.out.println("Dismiss "+id);
 		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
 		ams.dismiss(req, Integer.parseInt(id));
@@ -65,6 +70,7 @@ public class AlertList {
 	}
 
 	public List<AlertDTO> getAlerts() {
+		initialize();
 		return alerts;
 	}
 

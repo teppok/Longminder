@@ -34,11 +34,13 @@ public class ModifyUser extends UserDTO implements Serializable {
 	 */
 	
 	public void initialize() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpServletRequest req = (HttpServletRequest) context.getExternalContext()
-							.getRequest();
-		
-		ums.fill(req, this);
+		if (!FacesContext.getCurrentInstance().isPostback()) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpServletRequest req = (HttpServletRequest) context.getExternalContext()
+								.getRequest();
+			
+			ums.fill(req, this);
+		}
 	}
 
 	/**
