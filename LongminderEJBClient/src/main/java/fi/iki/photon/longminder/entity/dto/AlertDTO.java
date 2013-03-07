@@ -81,6 +81,10 @@ public class AlertDTO implements Serializable {
 		return 2;
 	}
 
+	public boolean isPast() {
+		return (nextAlert.before(new Date()));
+	}
+	
 	public String getDescription() {
 		return description;
 	}

@@ -45,6 +45,7 @@ public class HistoryList {
 	 */
 
 	public String deleteAlert(String id) {
+		System.out.println("H:Delete");
 		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		
 		ams.deleteAlert(req, Integer.parseInt(id));
@@ -58,6 +59,7 @@ public class HistoryList {
 	 */
 
 	public String dismiss(String id) {
+		System.out.println("H:Dismiss");
 		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
 		ams.dismiss(req, Integer.parseInt(id));
@@ -65,6 +67,7 @@ public class HistoryList {
 	}
 
 	public List<AlertDTO> getHistory() {
+		initialize();
 		return history;
 	}
 

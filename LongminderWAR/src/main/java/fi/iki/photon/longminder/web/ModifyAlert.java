@@ -38,11 +38,13 @@ public class ModifyAlert extends AlertDTO implements Serializable {
 	 */
 
 	public void initialize(ComponentSystemEvent cse) {
-		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		
-		System.out.println("INIT ALERT");
-		System.out.println(getId());
-		ams.fill(req, this);
+		if (!FacesContext.getCurrentInstance().isPostback()) {
+			HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			
+			System.out.println("INIT ALERT");
+			System.out.println(getId());
+			ams.fill(req, this);
+		}
 	}
 
 	/**

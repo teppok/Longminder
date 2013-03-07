@@ -124,6 +124,7 @@ public class AlertManagerService implements Serializable {
 	 */
 	
 	public void dismiss(HttpServletRequest req, int id) {
+		System.out.println("Dismiss");
 		am.dismiss(req.getRemoteUser(), id);
 	}
 

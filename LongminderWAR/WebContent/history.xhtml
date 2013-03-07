@@ -22,7 +22,7 @@ Alert history
 <h:link outcome="mainpage" class="smalllink" value="View upcoming alerts" /><br />
 <h:form>
 <h:dataTable id="alerts" captionStyle="font-weight:bold" columnClasses="listcolumn1, listcolumn2, listcolumn3, listcolumn4, listcolumn5, listcolumn6" headerClass="list-header" summary="Alerts"
-   value="#{alertList.history}" border="0" var="item" styleClass="alert-table">
+   value="#{historyList.history}" border="0" var="item" styleClass="alert-table">
 <h:column headerClass="listheader1">
 	<f:facet name="header">
 		<h:outputText value="Description" />
@@ -51,14 +51,14 @@ Alert history
 	</f:facet>
 	<h:panelGroup rendered="#{!item.oneOff}">
 	<h:outputText value="Yes" rendered="#{(item.dismissed)}" />
-	<h:commandLink value="Dismiss" action="#{alertList.dismiss(item.id)}" rendered="#{!item.dismissed}" />
+	<h:commandLink value="Dismiss" action="#{historyList.dismiss(item.id)}" rendered="#{!item.dismissed}" />
 	</h:panelGroup>
 </h:column>
 <h:column headerClass="listheader5">
 	<f:facet name="header">
 		<h:outputText value="Delete" />
 	</f:facet>
-	<h:commandLink value="X" action="#{alertList.deleteAlert(item.id)}" />
+	<h:commandLink value="X" action="#{historyList.deleteAlert(item.id)}" />
 </h:column>
 </h:dataTable>
 </h:form>
