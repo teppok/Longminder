@@ -19,6 +19,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -44,11 +46,10 @@ public class EmailManagerBean implements EmailManager {
     @Resource(name = "mail/longminderMail")
     private Session mailSession;
 
-    private final boolean ignoreEmail = true;
-
-    // TODO Get serverBase from JDNI or something, instead of a parameter to
-    // request.
-    private String serverBase = "http://localhost:8080/longminder";
+    // Set this JDNI resource to null to bypass any email sending.
+    // Otherwise, set it to the server root such as "http://localhost:8080/longminder" 
+    @Resource(lookup="longminder/rooturl")
+    private String serverBase;
 
     /**
      * Default constructor.
@@ -119,6 +120,7 @@ public class EmailManagerBean implements EmailManager {
 
     @Schedule(minute = "*", hour = "*")
     public void sendEmails() {
+        System.out.println(serverBase);
         System.out.println("Send emails!");
         final List<User> users = um.getVerifiedUsers();
 
@@ -147,7 +149,7 @@ public class EmailManagerBean implements EmailManager {
                 return;
             }
 
-            if (ignoreEmail) {
+            if (serverBase == null) {
                 System.out.println(alertString);
 
                 final Calendar alertCal = Calendar.getInstance();
