@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -16,6 +18,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * on a specified weekday.
  */
 @Entity
+@Access(AccessType.FIELD)
 @DiscriminatorValue("WEEKREPEAT")
 public class WeekRepeat extends Repeat implements Serializable {
 

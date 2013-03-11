@@ -2,6 +2,8 @@ package fi.iki.photon.longminder.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,6 +14,7 @@ import javax.persistence.OneToOne;
  * 
  */
 @Entity
+@Access(AccessType.FIELD)
 public class EmailRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;

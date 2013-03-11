@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +31,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * User.java, but the reference is JPA-unidirectional.
  */
 @Entity
+@Access(AccessType.FIELD)
 public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -43,11 +46,11 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     @Column(nullable = false)
     private Date nextAlert;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Repeat.class)
     @JoinColumn(name = "REPEAT", nullable = true)
     private Repeat repeat;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST, targetEntity = Alert.class)
     @JoinColumn(name = "PARENTALERT", nullable = true)
     private List<Alert> linkedAlerts;
 

@@ -3,6 +3,8 @@ package fi.iki.photon.longminder.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -28,6 +30,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * 
  */
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "REPEAT_HIERARCHY")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DISCRIMINATOR", discriminatorType = DiscriminatorType.STRING)
@@ -87,10 +90,7 @@ abstract public class Repeat implements Serializable {
         if (repeatTimes != null && repeatTimes.intValue() == 0) {
             return false;
         }
-        if (repeatUntil != null && nextRepeat.after(repeatUntil)) {
-            return false;
-        }
-        return true;
+        return !(repeatUntil != null && nextRepeat.after(repeatUntil));
     }
 
     public int getId() {

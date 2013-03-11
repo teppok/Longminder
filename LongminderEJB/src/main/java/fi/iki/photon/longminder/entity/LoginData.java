@@ -3,6 +3,8 @@ package fi.iki.photon.longminder.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
@@ -16,6 +18,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
+@Access(AccessType.FIELD)
 public class LoginData implements Serializable {
 
     private static final long serialVersionUID = 1L;

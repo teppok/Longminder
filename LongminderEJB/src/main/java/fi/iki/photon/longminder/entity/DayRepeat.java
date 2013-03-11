@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -15,6 +17,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * Represents a repeat based on n days between alerts.
  */
 @Entity
+@Access(AccessType.FIELD)
 @DiscriminatorValue("DAYREPEAT")
 public class DayRepeat extends Repeat implements Serializable {
 

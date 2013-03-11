@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -35,6 +37,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
  */
 @Entity
 @Table(name = "USERS")
+@Access(AccessType.FIELD)
 @Cacheable(false)
 public class User extends fi.iki.photon.utils.Entity implements Serializable {
 
@@ -66,11 +69,11 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
     private String locale;
 
     // bi-directional one-to-many association to Alert
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Alert.class)
     @JoinColumn(name = "OWNER")
     private List<Alert> alerts;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = LoginData.class)
     @JoinColumn(name = "OWNER")
     private List<LoginData> logins;
 

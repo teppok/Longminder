@@ -3,10 +3,10 @@ package fi.iki.photon.longminder.entity;
 /**
  * Simple enum of the available groups.
  * 
- * @author Teppo Kankaanpää
+ * @author Teppo Kankaanpï¿½ï¿½
  * 
  */
 
 public enum Group {
-    ADMINISTRATOR, USER, DEFAULT;
+    ADMINISTRATOR, USER, DEFAULT
 }
