@@ -263,11 +263,8 @@ public class UserManagerBean implements UserManager {
 
         final String pwHash = DigestUtils.sha512Hex(u.getSalt() + password);
 
-        if (pwHash.equals(u.getPassword())) {
-            return true;
-        }
+        return pwHash.equals(u.getPassword());
 
-        return false;
     }
 
     /**

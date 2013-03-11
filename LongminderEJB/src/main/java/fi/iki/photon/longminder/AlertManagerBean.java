@@ -244,14 +244,13 @@ public class AlertManagerBean implements AlertManager {
     }
 
     public List<Alert> getRawAlertsForEmail(final String email) {
-        final List<Alert> listResult = em
+        return em
                 .createQuery(
                         "SELECT a FROM User u JOIN u.alerts a WHERE u.email = ?1 AND "
                                 + "((a.oneOff = true AND a.fired = false) OR "
                                 + "(a.oneOff = false AND a.dismissed = false)) ORDER BY a.nextAlert ASC",
                         Alert.class).setParameter(1, email).getResultList();
 
-        return listResult;
     }
 
     @Override
