@@ -12,7 +12,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
  * A backing bean for profile.xhtml page that holds the values concerning the
  * user. Actually extends UserDTO for ease of use of data transfer.
  * 
- * @author Teppo Kankaanpää
+ * @author Teppo Kankaanpï¿½ï¿½
  * 
  */
 
@@ -21,7 +21,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 public class ModifyUser extends UserDTO {
 
     @EJB
-    UserManagerService ums;
+    private UserManagerService ums;
 
     /**
      * Called on preRenderView - fetches the values for this object from the

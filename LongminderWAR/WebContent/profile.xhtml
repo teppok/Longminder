@@ -18,44 +18,44 @@ xmlns:f="http://java.sun.com/jsf/core">
 </ui:define>
 
 <ui:define name="body">
-<h2>User info:</h2>
+<h2><h:outputText value="#{bundle['profile.header']}:" /></h2>
 <h:form>
 <h:inputHidden value="#{modifyUser.id}" />
 <h:panelGroup layout="block" class="lightbox">
 <h:panelGrid columns="2">
-<h:outputLabel value="Email"></h:outputLabel>
+<h:outputLabel value="#{bundle['email']}"></h:outputLabel>
 		<h:inputText value="#{modifyUser.email}">
 			<f:validateRegex pattern="^([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)$" />
 		</h:inputText>
-<h:outputLabel value="First name"></h:outputLabel>
+<h:outputLabel value="#{bundle['first']}"></h:outputLabel>
 <h:inputText value="#{modifyUser.first}" required="true" requiredMessage="#{bundle['required.first']}" ></h:inputText>
-<h:outputLabel value="Last name"></h:outputLabel>
+<h:outputLabel value="#{bundle['last']}"></h:outputLabel>
 <h:inputText value="#{modifyUser.last}" required="true" requiredMessage="#{bundle['required.last']}" ></h:inputText>
-<h:outputLabel value="Old password"></h:outputLabel>
+<h:outputLabel value="#{bundle['oldpassword']}"></h:outputLabel>
 <h:inputSecret value="#{modifyUser.oldPassword}" />
-<h:outputLabel value="New password"></h:outputLabel>
+<h:outputLabel value="#{bundle['newpassword']}"></h:outputLabel>
 <h:inputSecret value="#{modifyUser.password1}" />
-<h:outputLabel value="New password again"></h:outputLabel>
+<h:outputLabel value="#{bundle['newpasswordagain']}"></h:outputLabel>
 <h:inputSecret value="#{modifyUser.password2}" />
 </h:panelGrid>
-<h:commandButton action="#{modifyUser.modify}" value="Modify" /><br />
-<h:outputText value="(If you modify your email, a new verification email will be sent)" /><br />
-<h:outputText value="(If you modify your password or email, you must enter the old password.)" /><br />
+<h:commandButton action="#{modifyUser.modify}" value="#{bundle['modify']}" /><br />
+<h:outputText value="(#{bundle['profile.nb1']})" /><br />
+<h:outputText value="(#{bundle['profile.nb2']})" /><br />
 </h:panelGroup>
 </h:form>
 <h:form>
 <br />
 <h:panelGroup layout="block" class="lightbox">
-<h:outputLabel value="Email verified"></h:outputLabel>
-<h:outputLabel value='#{modifyUser.verified?"Yes":"No"}' /><br />
+<h:outputLabel value="#{bundle['profile.emailverified']}"></h:outputLabel>
+<h:outputLabel value="#{modifyUser.verified?bundle['yes']:bundle['no']}" /><br />
 <h:panelGroup rendered="#{! modifyUser.verified}">
-<h:commandButton action="#{modifyUser.resend}" value="Resend verification email" /><br />
-<h:outputText value="(Sends the verification to #{modifyUser.email})" />
+<h:commandButton action="#{modifyUser.resend}" value="#{bundle['profile.resendemail']}" /><br />
+<h:outputText value="(#{bundle['profile.nbresendemail']} #{modifyUser.email})" />
 </h:panelGroup>
 </h:panelGroup>
 </h:form>
 <h:form>
-<h:commandButton action="mainpage" value="Back" />
+<h:commandButton action="mainpage" value="#{bundle['back']}" />
 </h:form>
 </ui:define>
 </ui:composition>

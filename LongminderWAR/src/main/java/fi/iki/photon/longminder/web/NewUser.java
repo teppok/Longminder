@@ -12,7 +12,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 /**
  * A backing bean for register.xhtml.
  * 
- * @author Teppo Kankaanpää
+ * @author Teppo Kankaanpï¿½ï¿½
  * 
  */
 
@@ -21,7 +21,7 @@ import fi.iki.photon.longminder.entity.dto.UserDTO;
 public class NewUser extends UserDTO {
 
     @EJB
-    UserManagerService ums;
+    private UserManagerService ums;
 
     /**
      * Request that the new user should be registered.

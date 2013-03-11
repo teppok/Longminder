@@ -1,5 +1,7 @@
 package fi.iki.photon.longminder.web;
 
+import java.util.Locale;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -47,6 +49,10 @@ public class LoginDTO {
         final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
 
+        /*
+         * DISABLED LOGIN WITH TEMPORARY KEY UNTIL FURTHER
+         * REASSESSMENT 11.3.2013
+         * 
         final String key = req.getParameter("key");
         if (key != null) {
             System.out.println("Login with key: " + key);
@@ -56,6 +62,7 @@ public class LoginDTO {
                 return;
             }
         }
+        */
 
         System.out.println(req.getRemoteUser());
         if (req.getUserPrincipal() != null) {
@@ -151,6 +158,7 @@ public class LoginDTO {
         return "login";
     }
 
+
     public String getEmail() {
         return email;
     }
@@ -182,4 +190,5 @@ public class LoginDTO {
     public void setAuthorized(final boolean authorized) {
         this.authorized = authorized;
     }
+
 }

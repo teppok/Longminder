@@ -116,11 +116,11 @@ public class UserManagerService {
     /**
      * Logs the user out from the Servlet session and invalidates it.
      * 
+     *
      * @param req
-     * @return true if successful
      */
 
-    public boolean logout(final HttpServletRequest req) {
+    public void logout(final HttpServletRequest req) {
         if (req.getUserPrincipal() != null) {
             try {
                 req.logout();
@@ -130,7 +130,6 @@ public class UserManagerService {
             }
 
         }
-        return true;
     }
 
     /**
@@ -193,7 +192,7 @@ public class UserManagerService {
         }
 
         final boolean result = um.updateUser(oldLoginName, modifyUser);
-        if (result == false) {
+        if (!result) {
             return false;
         }
 

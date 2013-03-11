@@ -20,6 +20,7 @@
 	<application>
  	<locale-config>
 			<default-locale>en</default-locale>
+			<supported-locale>fi</supported-locale>
 		</locale-config>
 		<resource-bundle>
 			<base-name>fi.iki.photon.longminder.web.Messages</base-name>

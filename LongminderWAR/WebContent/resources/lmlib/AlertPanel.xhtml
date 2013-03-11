@@ -16,66 +16,65 @@ xmlns:h="http://java.sun.com/jsf/html">
 <h:form id="myform">
 <h:panelGroup layout="block" class="lightbox">
 <h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
-<h:outputLabel value="Description" />
+<h:outputLabel value="#{bundle['main.desc']}" />
 <h:inputText value="#{cc.attrs.alertTarget.description}" required="true" requiredMessage="Description is required." />
-<h:outputLabel value="Alert Date (dd.mm.yyyy)" />
+<h:outputLabel value="#{bundle['main.date']} (dd.mm.yyyy)" />
 <h:inputText value="#{cc.attrs.alertTarget.nextAlert}">
   <f:convertDateTime pattern="dd.MM.yyyy" />
 </h:inputText>
 </h:panelGrid>
-<h:outputText value="(You can leave the date empty if you set a repeat - the repeat interval will be used)" />
+<h:outputText value="(#{bundle['alert.nbdate']})" />
 </h:panelGroup>
 
 <h:panelGroup layout="block" class="lightbox">
 <h:selectOneRadio id="oneOffInt" required="true" value="#{cc.attrs.alertTarget.oneOffInt}">
-  <f:selectItem itemValue="1" itemLabel="One-off alert" />
-  <f:selectItem itemValue="2" itemLabel="Persistent alert" />
+  <f:selectItem itemValue="1" itemLabel="#{bundle['alert.oneoff']}" />
+  <f:selectItem itemValue="2" itemLabel="#{bundle['alert.persistent']}" />
 </h:selectOneRadio>
-<h:outputText value="(Persistent alert will go off every couple of days until you log in and dismiss the alert.)" /><br />
-<h:outputText value="NOTE: Currently email sending limits are not in effect for testing purposes so persistent alerts will go off every minute." />
+<h:outputText value="(#{bundle['alert.nbpersistent']})" />
 </h:panelGroup>
 
 <h:panelGroup layout="block" class="lightbox">
 <h:selectOneRadio id="repeatType" required="true" value="#{cc.attrs.alertTarget.repeatType}" onchange="changeRepeat();">
-	<f:selectItem itemValue="0" itemLabel="No repeat" />
-	<f:selectItem itemValue="1" itemLabel="Day based repeat" />
-	<f:selectItem itemValue="2" itemLabel="Week based repeat" />
+	<f:selectItem itemValue="0" itemLabel="#{bundle['alert.norepeat']}" />
+	<f:selectItem itemValue="1" itemLabel="#{bundle['alert.dayrepeat']}" />
+	<f:selectItem itemValue="2" itemLabel="#{bundle['alert.weekrepeat']}" />
 </h:selectOneRadio>
 
 <div id="repeat1" style='display: ${(cc.attrs.alertTarget.repeatType == 1)?"block":"none"};'>
 <h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
-<h:outputLabel value="Repeat delay (in days)" />
+<h:outputLabel value="#{bundle['alert.daydelay']}" />
 <h:inputText value="#{cc.attrs.alertTarget.dayDelay}" />
 </h:panelGrid>
 </div>
 <div id="repeat2" style='display: ${(cc.attrs.alertTarget.repeatType == 2)?"block":"none"};'>
 <h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
-<h:outputLabel value="Repeat delay (in weeks)" />
+<h:outputLabel value="#{bundle['alert.weekdelay']}" />
 <h:inputText value="#{cc.attrs.alertTarget.weekDelay}" />
-<h:outputLabel value="Repeat week day" />
+<h:outputLabel value="#{bundle['alert.weekday']}" />
 <h:selectOneMenu id="repeatWeekDay" value="#{cc.attrs.alertTarget.alertWeekDay}">
-	<f:selectItem itemValue="0" itemLabel="Monday" />
-	<f:selectItem itemValue="1" itemLabel="Tuesday" />
-	<f:selectItem itemValue="2" itemLabel="Wednesday" />
-	<f:selectItem itemValue="3" itemLabel="Thursday" />
-	<f:selectItem itemValue="4" itemLabel="Friday" />
-	<f:selectItem itemValue="5" itemLabel="Saturday" />
-	<f:selectItem itemValue="6" itemLabel="Sunday" />
+	<f:selectItem itemValue="0" itemLabel="#{bundle['alert.mon']}" />
+	<f:selectItem itemValue="1" itemLabel="#{bundle['alert.tue']}" />
+	<f:selectItem itemValue="2" itemLabel="#{bundle['alert.wed']}" />
+	<f:selectItem itemValue="3" itemLabel="#{bundle['alert.thu']}" />
+	<f:selectItem itemValue="4" itemLabel="#{bundle['alert.fri']}" />
+	<f:selectItem itemValue="5" itemLabel="#{bundle['alert.sat']}" />
+	<f:selectItem itemValue="6" itemLabel="#{bundle['alert.sun']}" />
 </h:selectOneMenu>
 </h:panelGrid>
-<h:outputText value="(Week changes on Sunday/Monday, alert will be sent on the week the specified number of weeks from now on the specified week day)" />
+<h:outputText value="(#{bundle['alert.nbweek']})" />
 </div>
 
 <div id="repeat_common" style='display: ${(cc.attrs.alertTarget.repeatType > 0)?"block":"none"};'>
 <h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
-<h:outputLabel value="Repeat until date" />
+<h:outputLabel value="#{bundle['alert.repeatuntil']}" />
 <h:inputText value="#{cc.attrs.alertTarget.repeatUntil}">
   <f:convertDateTime pattern="dd.MM.yyyy" />
 </h:inputText>
-<h:outputLabel value="Repeat this many times" />
+<h:outputLabel value="#{bundle['alert.repeattimes']}" />
 <h:inputText value="#{cc.attrs.alertTarget.repeatTimes}" />
 </h:panelGrid>
-<h:outputText value="(Repeating stops whenever either constraint is met. Leave both fields empty for a forever repeating alert.)" />
+<h:outputText value="(#{bundle['alert.nbrepeat']})" />
 </div>
 </h:panelGroup>
 

@@ -18,14 +18,14 @@ xmlns:f="http://java.sun.com/jsf/core">
 </ui:define>
 
 <ui:define name="body">
-Upcoming alerts 
-<h:link outcome="history" class="smalllink" value="View alert history" /><br />
+<h:outputText value="#{bundle['main.upcoming']}" /> 
+<h:link outcome="history" class="smalllink" value="#{bundle['main.history']}" /><br />
 <h:form>
 <h:dataTable id="alerts" captionStyle="font-weight:bold" columnClasses="listcolumn1, listcolumn2, listcolumn3, listcolumn4, listcolumn5, listcolumn6" headerClass="list-header" summary="Alerts"
    value="#{alertList.alerts}" border="0" var="item" styleClass="alert-table">
 <h:column headerClass="listheader1">
 	<f:facet name="header">
-		<h:outputText value="Description" />
+		<h:outputText value="#{bundle['main.desc']}" />
 	</f:facet>
 	<h:link value="#{item.description}" outcome="modifyalert">
 		<f:param name="alertid" value="#{item.id}" />
@@ -33,7 +33,7 @@ Upcoming alerts
 </h:column>
 <h:column headerClass="listheader2">
 	<f:facet name="header">
-		<h:outputText value="Alert date" />
+		<h:outputText value="#{bundle['main.date']}" />
 	</f:facet>
 	<h:outputText value="#{item.nextAlert}">
       <f:convertDateTime pattern="dd.MM.yyyy" />
@@ -41,35 +41,35 @@ Upcoming alerts
 </h:column>
 <h:column headerClass="listheader3">
 	<f:facet name="header">
-		<h:outputText value="Days left" />
+		<h:outputText value="#{bundle['main.left']}" />
 	</f:facet>
 	<h:outputText value="#{item.timeLeft}" />
 </h:column>
 <h:column headerClass="listheader4">
 	<f:facet name="header">
-		<h:outputText value="Repeat" />
+		<h:outputText value="#{bundle['main.repeat']}" />
 	</f:facet>
 	<h:outputText value="*" rendered="#{item.repeatType > 0}"/>
 </h:column>
 <h:column headerClass="listheader5">
 	<f:facet name="header">
-		<h:outputText value="Persistent" />
+		<h:outputText value="#{bundle['main.persistent']}" />
 	</f:facet>
 	<h:panelGroup rendered="#{!item.oneOff}">
-	<h:outputText value="Yes" rendered="#{(item.dismissed or !item.fired)}" />
-	<h:commandLink value="Dismiss" action="#{alertList.dismiss(item.id)}" rendered="#{!item.dismissed and item.fired}" />
+	<h:outputText value="#{bundle['yes']}" rendered="#{(item.dismissed or !item.fired)}" />
+	<h:commandLink value="#{bundle['main.dismiss']}" action="#{alertList.dismiss(item.id)}" rendered="#{!item.dismissed and item.fired}" />
 	</h:panelGroup>
 </h:column>
 <h:column headerClass="listheader6">
 	<f:facet name="header">
-		<h:outputText value="Delete" />
+		<h:outputText value="#{bundle['main.remove']}" />
 	</f:facet>
 	<h:commandLink value="X" action="#{alertList.deleteAlert(item.id)}" />
 </h:column>
 </h:dataTable>
 </h:form>
 <h:form>
-<h:commandButton action="newalert" value="New alert" />
+<h:commandButton action="newalert" value="#{bundle['newalert']}" />
 </h:form>
 </ui:define>
 </ui:composition>

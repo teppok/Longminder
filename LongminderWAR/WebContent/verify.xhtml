@@ -12,19 +12,20 @@ xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:define name="head">
 	<f:metadata>
-		<f:event listener="#{loginDTO.checkLogin}" type="preRenderView" />
 		<f:event listener="#{loginDTO.verify}" type="preRenderView" />
 	</f:metadata>
 </ui:define>
 
 <ui:define name="body">
-
-<h:outputText value="Your email address has been verified." rendered="#{loginDTO.verified}" /><br />
-
-<h:outputText value="Email address verification fail. Either the address was copied incorrectly or the temporary key has been expired." rendered="#{! loginDTO.verified}" /><br />
+<h:panelGroup rendered="#{loginDTO.verified}">
+	<h:outputText value="#{bundle['verify.verified']}" /><br />
+</h:panelGroup>
+<h:panelGroup rendered="#{! loginDTO.verified}">
+	<h:outputText value="#{bundle['verify.notverified']}" /><br />
+</h:panelGroup>
 
 <h:form>
-	<h:commandLink action="mainpage" value="Return to main page" />
+	<h:link outcome="mainpage" value="#{bundle['verify.return']}" />
 </h:form>
 </ui:define>
 </ui:composition>

@@ -14,7 +14,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * A backing bean for history.xhtml that fetches the alert list and handles
  * delete alert and dismiss alert requests.
  * 
- * @author Teppo Kankaanpää
+ * @author Teppo Kankaanpï¿½ï¿½
  * 
  */
 
@@ -22,7 +22,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
 @RequestScoped
 public class HistoryList {
     @EJB
-    AlertManagerService ams;
+    private AlertManagerService ams;
 
     private List<AlertDTO> history;
 

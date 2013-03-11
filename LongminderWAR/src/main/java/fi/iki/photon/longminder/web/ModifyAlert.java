@@ -14,7 +14,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * to set and read.
  * 
  * 
- * @author Teppo Kankaanpää
+ * @author Teppo Kankaanpï¿½ï¿½
  * 
  */
 
@@ -23,7 +23,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
 public class ModifyAlert extends AlertDTO {
 
     @EJB
-    AlertManagerService ams;
+    private AlertManagerService ams;
 
     /**
      * Called on preRenderView, initializes the data in this object.

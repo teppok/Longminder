@@ -13,7 +13,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * A backing bean for newalert.xhtml. Actually extends AlertDTO for ease of data
  * transfer.
  * 
- * @author Teppo Kankaanpää
+ * @author Teppo Kankaanpï¿½ï¿½
  * 
  */
 
@@ -22,7 +22,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
 public class NewAlert extends AlertDTO {
 
     @EJB
-    AlertManagerService ams;
+    private AlertManagerService ams;
 
     /**
      * Requests that the alert should be created.

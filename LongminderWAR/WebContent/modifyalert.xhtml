@@ -40,10 +40,10 @@ xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:define name="body">
 
-<ez:AlertPanel alertTarget="#{modifyAlert}" action="#{modifyAlert.modify}" actionLabel="Modify" id="panel">
+<ez:AlertPanel alertTarget="#{modifyAlert}" action="#{modifyAlert.modify}" actionLabel="#{bundle['modify']}" id="panel">
 </ez:AlertPanel>
 <h:form>
-<h:commandButton action="mainpage" value="Back" />
+<h:commandButton action="mainpage" value="#{bundle['back']}" />
 </h:form>
 
 </ui:define>

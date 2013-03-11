@@ -11,7 +11,7 @@ xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="./template.xhtml">
 
 <ui:define name="body">
-<h2>#{bundle.registrationform}</h2>
+<h2><h:outputText value="#{bundle.registrationform}" /></h2>
 <h:form>
 	<h:panelGrid columns="2">
 		<h:outputLabel value="#{bundle.email}" for="email" />
@@ -26,12 +26,13 @@ xmlns:f="http://java.sun.com/jsf/core">
 		<h:inputSecret id="password1" value="#{newUser.password1}"  required="true" requiredMessage="#{bundle['required.password1']}" />
 		<h:outputLabel value="#{bundle.passwordagain}" for="password2" />
 		<h:inputSecret id="password2" value="#{newUser.password2}" required="true" requiredMessage="#{bundle['required.password2']}" />
-		<h:commandButton action="#{newUser.register}" value="#{bundle.register}" />
+		<h:commandButton action="#{newUser.register}" value="#{bundle['login.register']}" />
 	</h:panelGrid>
 </h:form>
 <h:form>
 <h:commandButton action="login" value="#{bundle.back}" />
 </h:form>
+<h:outputText value="#{bundle['register.confirmation']}" />
 </ui:define>
 </ui:composition>
 </h:body>

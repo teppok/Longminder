@@ -37,10 +37,10 @@ function changeRepeat() {
 </ui:define>
 
 <ui:define name="body">
-<ez:AlertPanel alertTarget="#{newAlert}" action="#{newAlert.create}" actionLabel="Create" id="panel">
+<ez:AlertPanel alertTarget="#{newAlert}" action="#{newAlert.create}" actionLabel="#{bundle['create']}" id="panel">
 </ez:AlertPanel>
 <h:form>
-<h:commandButton action="mainpage" value="Back" />
+<h:commandButton action="mainpage" value="#{bundle['back']}" />
 </h:form>
 </ui:define>
 </ui:composition>
