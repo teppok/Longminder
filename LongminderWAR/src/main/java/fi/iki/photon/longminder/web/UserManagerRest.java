@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import fi.iki.photon.longminder.LongminderException;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 /**
@@ -68,7 +69,9 @@ public class UserManagerRest {
             @Context final HttpServletRequest req) {
         final JsonResponse response = new JsonResponse();
 
-        if (!ums.register(ud, req)) {
+        try {
+            ums.register(ud, req);
+        } catch (LongminderException e) {
             response.setStatus("FAILED");
             response.setErrorMsg("Invalid username or password");
             return Response.ok().entity(response).build();

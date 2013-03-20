@@ -60,6 +60,7 @@ public class AlertManagerBeanTest {
 		ud.setPassword2("test");
 		User u = new User();
 		
+		System.out.println(u.getEmail());
 //		umb.save(u);
 		
 //			u = umb.find("test");

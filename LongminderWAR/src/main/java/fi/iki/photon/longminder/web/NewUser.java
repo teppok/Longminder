@@ -7,6 +7,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import fi.iki.photon.longminder.LongminderException;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 /**
@@ -34,15 +35,20 @@ public class NewUser extends UserDTO {
         final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
 
-        // TODO Validate input!
-
-        final boolean result = ums.register(this, req);
-
-        if (result) {
-            return "mainpage";
+        if (req.getUserPrincipal() != null) {
+            final FacesMessage msg = new FacesMessage("Already logged in. Registration failed.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
         }
-        final FacesMessage msg = new FacesMessage("Registration failed.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        return null;
+        
+        // TODO Validate input!
+        try {
+            ums.register(this, req);
+        } catch (LongminderException e) {
+            final FacesMessage msg = new FacesMessage("Registration failed. " + e.toString());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }
+        return "mainpage";
     }
 }

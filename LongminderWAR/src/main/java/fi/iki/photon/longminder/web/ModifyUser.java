@@ -1,11 +1,13 @@
 package fi.iki.photon.longminder.web;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import fi.iki.photon.longminder.LongminderException;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 
 /**
@@ -51,13 +53,17 @@ public class ModifyUser extends UserDTO {
 
         // TODO Validate data!
 
-        System.out.println("Modify: " + getId());
-        final boolean result = ums.modify(this, req);
-
-        if (result) {
-            return "mainpage";
+        try {
+            
+            System.out.println("Modify: " + getId());
+            ums.modify(this, req);
+        } catch (LongminderException e) {
+            final FacesMessage msg = new FacesMessage("Profile modification failed: " + e.toString());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
         }
-        return null;
+    
+        return "mainpage";
     }
 
     /**

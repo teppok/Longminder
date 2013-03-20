@@ -5,6 +5,6 @@ import javax.ejb.Remote;
 @Remote
 public interface EmailManager {
 
-    public boolean requestVerificationEmail(String serverBase, String email);
+    public boolean requestVerificationEmail(String email);
 
 }

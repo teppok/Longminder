@@ -114,7 +114,7 @@ public class AlertManagerBean implements AlertManager {
                     return false;
                 }
             }
-            u.getAlerts().add(a);
+            u.addAlert(a);
             return true;
         }
         return false;

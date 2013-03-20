@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpServletRequest;
 
+import fi.iki.photon.longminder.LongminderException;
+
 /**
  * A backing bean storing login information for the user.
  * 
@@ -117,7 +119,11 @@ public class LoginDTO {
 
         final String key = req.getParameter("key");
         if (key != null) {
-            verified = ums.verify(key);
+            try {
+                verified = ums.verify(key);
+            } catch (LongminderException e) {
+                // Ignore exceptions.
+            }
         }
     }
 

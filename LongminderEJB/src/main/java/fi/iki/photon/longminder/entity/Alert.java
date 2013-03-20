@@ -1,6 +1,7 @@
 package fi.iki.photon.longminder.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -147,9 +148,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
                 }
                 newAlert.setRepeat(r);
 
-                final List<Alert> linked = newAlert.getLinkedAlerts();
-
-                linked.add(newAlert);
+                newAlert.addLinkedAlert(newAlert);
 
                 setRepeat(null);
 
@@ -199,7 +198,7 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     public void setOneOff(final boolean oneOff) {
         this.oneOff = oneOff;
     }
-
+/*
     public List<Alert> getLinkedAlerts() {
         return linkedAlerts;
     }
@@ -207,7 +206,13 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
     public void setLinkedAlerts(final List<Alert> linkedAlerts) {
         this.linkedAlerts = linkedAlerts;
     }
+    */
 
+    public void addLinkedAlert(Alert linkedAlert) {
+        if (linkedAlerts == null) linkedAlerts = new ArrayList<>();
+        linkedAlerts.add(linkedAlert);
+    }
+    
     public boolean isDismissed() {
         return dismissed;
     }

@@ -27,6 +27,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import fi.iki.photon.longminder.LongminderException;
 import fi.iki.photon.longminder.UserManagerBean;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 
@@ -112,23 +113,23 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
      * @param ud
      */
 
-    public void initialize(final UserDTO ud) {
+    public void initialize(final UserDTO ud) throws LongminderException {
 
         // First time when initializing a new User, password must be non-null
         // and of proper length.
         if (password == null) {
             if (ud.getPassword1() == null || ud.getPassword1().length() == 0) {
-                throw new RuntimeException("Invalid passwords");
+                throw new LongminderException("Invalid passwords.");
             }
         }
         if (ud.getPassword1() != null
                 && !(ud.getPassword1().equals(ud.getPassword2()))) {
-            throw new RuntimeException("Invalid passwords");
+            throw new LongminderException("Password mismatch.");
         }
 
         if (email == null) {
             if (ud.getEmail() == null || ud.getEmail().length() == 0) {
-                throw new RuntimeException("Invalid email");
+                throw new LongminderException("Invalid email.");
             }
         }
 
@@ -139,12 +140,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
             lastname = ud.getLast();
         }
 
-        if (email != null && email.equals(ud.getEmail())) {
-            // Don't modify email verified value if the email is the same as
-            // before.
-        } else {
-            verified = false;
-        }
         if (ud.getEmail() != null) {
             email = ud.getEmail();
         }
@@ -155,9 +150,8 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         }
 
         if (ud.getGroups() != null) {
-            groups.clear();
             for (final String g : ud.getGroups()) {
-                groups.add(Group.valueOf(g));
+                addGroup(Group.valueOf(g));
             }
         }
 
@@ -238,11 +232,16 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         this.password = password;
     }
 
-    public List<Group> getGroups() {
+    public void addGroup(Group g) {
+        if (groups == null) groups = new ArrayList<>();
+        groups.add(g);
+    }
+    
+    private List<Group> getGroups() {
         return groups;
     }
-
-    public void setGroups(final List<Group> groups) {
+    
+    private void setGroups(final List<Group> groups) {
         this.groups = groups;
     }
 
@@ -254,14 +253,25 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         this.salt = salt;
     }
 
-    public List<Alert> getAlerts() {
+    private List<Alert> getAlerts() {
         return alerts;
     }
 
-    public void setAlerts(final List<Alert> alerts) {
+    private void setAlerts(final List<Alert> alerts) {
         this.alerts = alerts;
     }
+    
+    public void addAlert(Alert a) {
+        if (alerts == null) alerts = new ArrayList<>();
+        alerts.add(a);
+    }
 
+    public void addAllAlerts(List<Alert> a) {
+        if (alerts == null) alerts = new ArrayList<>();
+        alerts.addAll(a);
+    }
+
+    
     public boolean isVerified() {
         return verified;
     }
@@ -269,15 +279,26 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
     public void setVerified(final boolean verified) {
         this.verified = verified;
     }
-
-    public List<LoginData> getLogins() {
+    
+    private List<LoginData> getLogins() {
         return logins;
     }
 
-    public void setLogins(final List<LoginData> logins) {
+    private void setLogins(final List<LoginData> logins) {
         this.logins = logins;
     }
-
+    
+    public LoginData getLogin() {
+        if (logins == null || logins.size() == 0) return null;
+        return logins.get(0);
+    }
+    
+    public void setLogin(LoginData login) {
+        if (logins == null) logins = new ArrayList<>();
+        logins.clear();
+        logins.add(login);
+    }
+    
     public int getId() {
         return id;
     }

@@ -51,20 +51,19 @@ public class UserManagerBean implements UserManager {
      * Given an UserDTO object, create a new User object based on the values in
      * the object and store it in the Persistence Context.
      * 
-     * @return fail if User with the same email exists in the database already.
      */
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public boolean create(final UserDTO ud) {
+    public void create(final UserDTO ud) throws LongminderException {
         if (ud == null) {
-            return false;
+            throw new LongminderException("Program error.");
         }
 
         final User utmp = findTrueUserForEmail(ud.getEmail());
 
         if (utmp != null) {
-            return false;
+            throw new LongminderException("User already exists.");
         }
 
         final User u = new User();
@@ -77,9 +76,6 @@ public class UserManagerBean implements UserManager {
 
         // Transfer the id value and the returnPassword to the UserDTO object.
         u.initializeDTO(ud);
-
-        return true;
-
     }
 
     /**
@@ -88,7 +84,7 @@ public class UserManagerBean implements UserManager {
      */
 
     @Override
-    public UserDTO find(final String email) {
+    public UserDTO find(final String email) throws LongminderException {
         final User u = findTrueUserForEmail(email);
         if (u == null) {
             return null;
@@ -126,7 +122,7 @@ public class UserManagerBean implements UserManager {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void remove(final String email) {
+    public void remove(final String email) throws LongminderException {
         final User u = findTrueUserForEmail(email);
 
         if (u != null) {
@@ -176,9 +172,7 @@ public class UserManagerBean implements UserManager {
         newLogin.setLoginkey(random);
         newLogin.setIssued(new Date());
 
-        u.getLogins().clear();
-
-        u.getLogins().add(newLogin);
+        u.setLogin(newLogin);
 
         return newLogin;
     }
@@ -211,7 +205,7 @@ public class UserManagerBean implements UserManager {
      */
 
     @Override
-    public UserDTO findWithLoginKey(final String key) {
+    public UserDTO findWithLoginKey(final String key) throws LongminderException {
         final List<User> users = em
                 .createQuery(
                         "SELECT u FROM User u JOIN u.logins l WHERE l.loginkey LIKE ?1",
@@ -275,43 +269,54 @@ public class UserManagerBean implements UserManager {
      * Allows modification of password only if the supplied oldPassword is the
      * same as the current password.
      * 
-     * @return false if passwords don't match or an error happens.
      */
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
-    public boolean updateUser(final String email, final UserDTO ud) {
+    public void updateUser(final String email, final UserDTO ud) throws LongminderException {
         if (ud == null || email == null) {
-            return false;
+            throw new LongminderException("Authentication error.");
         }
 
-        final User tmpUser = findTrueUserForEmail(ud.getEmail());
-        if (tmpUser != null) {
-            return false;
-        }
+        System.out.println(ud.getEmail());
 
         final User u = findTrueUserForEmail(email);
 
         if (u == null) {
-            return false;
+            throw new LongminderException("Authentication error.");
         }
 
+        // Email change requested
+        if (ud.getEmail() != null) {
+            if (! email.equals(ud.getEmail())) {
+                // Check that the email doesn't already exist with someone else.
+                final User tmpUser = findTrueUserForEmail(ud.getEmail());
+                if (tmpUser != null) {
+                    throw new LongminderException("Email already exists.");
+                }
+                if (!verifyPassword(u, ud.getOldPassword())) {
+                    throw new LongminderException("Password mismatch.");
+                }
+            }
+        }
+        
         System.out.println("Updateuser: " + u.getEmail());
 
-        if (ud.getPassword1() != null
-                || (ud.getEmail() != null && !ud.getEmail()
-                        .equals(u.getEmail()))) {
-            // Either password or email change requested.
+        if (ud.getPassword1() != null) {
+            // Password change requested.
             if (!verifyPassword(u, ud.getOldPassword())) {
-                return false;
+                throw new LongminderException("Password mismatch.");
             }
         }
         u.initialize(ud);
 
+        if (ud.getEmail() != null) {
+            if (! email.equals(ud.getEmail())) {
+                u.setVerified(false);
+            }
+        }
         // Mainly to get returnpassword from u.
         u.initializeDTO(ud);
-
-        return true;
     }
 
     /**
@@ -320,7 +325,7 @@ public class UserManagerBean implements UserManager {
      */
 
     @Override
-    public void fill(final String email, final UserDTO ud) {
+    public void fill(final String email, final UserDTO ud) throws LongminderException {
         final User u = findTrueUserForEmail(email);
 
         if (u != null) {

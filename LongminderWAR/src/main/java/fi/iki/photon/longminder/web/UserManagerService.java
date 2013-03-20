@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import fi.iki.photon.longminder.EmailManager;
+import fi.iki.photon.longminder.LongminderException;
 import fi.iki.photon.longminder.UserManager;
 import fi.iki.photon.longminder.entity.dto.UserDTO;
 
@@ -61,6 +62,8 @@ public class UserManagerService {
                 req.login(name, DigestUtils.sha512Hex(u.getSalt() + password));
             } catch (final ServletException e) {
                 return false;
+            } catch (final LongminderException e) {
+                return false;
             }
         }
         return true;
@@ -75,21 +78,20 @@ public class UserManagerService {
      * 
      * @param ud
      * @param req
-     * @return true if successful
      */
 
-    public boolean register(final UserDTO ud, final HttpServletRequest req) {
+    public void register(final UserDTO ud, final HttpServletRequest req) throws LongminderException {
 
         if (ud == null || ud.getEmail() == null || ud.getPassword1() == null
                 || ud.getEmail().length() == 0) {
-            return false;
+            throw new LongminderException("Invalid input.");
         }
         System.out.println("Registering " + ud.getEmail() + " "
                 + ud.getPassword1());
 
         final UserDTO existingUser = um.find(ud.getEmail());
         if (existingUser != null) {
-            return false;
+            throw new LongminderException("User already exists.");
         }
 
         final List<String> groups = new ArrayList<String>();
@@ -110,7 +112,9 @@ public class UserManagerService {
 
         sendVerificationEmail(req);
 
-        return result;
+        if (! result) {
+            throw new LongminderException("Register/Login failed.");
+        }
     }
 
     /**
@@ -143,7 +147,12 @@ public class UserManagerService {
 
     public boolean loginWithKey(final String key, final HttpServletRequest req) {
         if (req.getUserPrincipal() == null) {
-            final UserDTO ud = um.findWithLoginKey(key);
+            final UserDTO ud;
+            try {
+                ud = um.findWithLoginKey(key);
+            } catch (LongminderException e) {
+                return false;
+            }
 
             if (ud == null) {
                 return false;
@@ -168,7 +177,7 @@ public class UserManagerService {
      * @return true if successful
      */
 
-    public boolean verify(final String key) {
+    public boolean verify(final String key) throws LongminderException {
         return um.verify(key);
     }
 
@@ -182,19 +191,15 @@ public class UserManagerService {
      * 
      * @param modifyUser
      * @param req
-     * @return true if successful
      */
 
-    public boolean modify(final UserDTO modifyUser, final HttpServletRequest req) {
+    public void modify(final UserDTO modifyUser, final HttpServletRequest req) throws LongminderException {
         final String oldLoginName = req.getRemoteUser();
-        if (oldLoginName == null || !oldLoginName.equals(modifyUser.getEmail())) {
-            return false;
+        if (oldLoginName == null) {
+            throw new LongminderException("Authentication error.");
         }
 
-        final boolean result = um.updateUser(oldLoginName, modifyUser);
-        if (!result) {
-            return false;
-        }
+        um.updateUser(oldLoginName, modifyUser);
 
         if (!oldLoginName.equals(modifyUser.getEmail())) {
             try {
@@ -205,10 +210,9 @@ public class UserManagerService {
                 req.login(modifyUser.getEmail(), modifyUser.getReturnPassword());
                 modifyUser.setReturnPassword(null);
             } catch (final ServletException e) {
-                return false;
+                throw new LongminderException("Unknown error.");
             }
         }
-        return true;
     }
 
     /**
@@ -220,8 +224,12 @@ public class UserManagerService {
      */
 
     public void fill(final HttpServletRequest req, final UserDTO modifyUser) {
-        um.fill(req.getRemoteUser(), modifyUser);
-
+        try {
+            um.fill(req.getRemoteUser(), modifyUser);
+        } catch (LongminderException e) {
+            // In case of authentication error raising an exception, do nothing.
+            return;
+        }
     }
 
     /**
@@ -231,9 +239,9 @@ public class UserManagerService {
      */
 
     public boolean sendVerificationEmail(final HttpServletRequest req) {
-        final String serverBase = req.getScheme() + "://" + req.getServerName()
-                + ":" + req.getServerPort() + "/" + req.getContextPath();
-        return emm.requestVerificationEmail(serverBase, req.getRemoteUser());
+//        final String serverBase = req.getScheme() + "://" + req.getServerName()
+//                + ":" + req.getServerPort() + "/" + req.getContextPath();
+        return emm.requestVerificationEmail(req.getRemoteUser());
     }
 
 }

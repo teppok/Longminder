@@ -59,14 +59,17 @@ public class EmailManagerBean implements EmailManager {
     }
 
     @Override
-    public boolean requestVerificationEmail(final String server,
-            final String email) {
-        serverBase = server;
-
+    public boolean requestVerificationEmail(final String email) {
+        System.out.println("REQUEST");
         final User u = um.findTrueUserForEmail(email);
 
+        if (u == null) {
+            System.out.println("STRANGE!");
+            return false;
+        }
+        
         // Test if we already have requested a verification.
-        final EmailRequest test = em.find(EmailRequest.class, u);
+        final EmailRequest test = em.find(EmailRequest.class, new Integer(u.getId()));
         if (test != null) {
             return true;
         }
@@ -84,10 +87,10 @@ public class EmailManagerBean implements EmailManager {
         try {
             final User u = um.findTrueUserForEmail(email);
             um.createLogin(u);
-            if (u.getLogins() == null || u.getLogins().size() == 0) {
+            if (u.getLogin() == null) {
                 throw new Error("Login key should have been created.");
             }
-            final String key = u.getLogins().get(0).getLoginkey();
+            final String key = u.getLogin().getLoginkey();
 
             final Message msg = new MimeMessage(mailSession);
             msg.setFrom(new InternetAddress("noreply@example.com"));
@@ -234,7 +237,7 @@ public class EmailManagerBean implements EmailManager {
                 }
             }
         }
-        u.getAlerts().addAll(newAlertList);
+        u.addAllAlerts(newAlertList);
 
         alertString.append("\n" + res.getString("email.ending"));
 
