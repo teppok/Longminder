@@ -1,5 +1,6 @@
 package fi.iki.photon.longminder;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,11 +47,14 @@ public class EmailManagerBean implements EmailManager {
     @Resource(name = "mail/longminderMail")
     private Session mailSession;
 
-    // Set this JDNI resource to null to bypass any email sending.
-    // Otherwise, set it to the server root such as "http://localhost:8080/longminder" 
+    // Set this String JDNI resource to the server root such as "http://localhost:8080/longminder" 
     @Resource(lookup="longminder/rooturl")
     private String serverBase;
 
+    // Set this Boolean JDNI resource to be true if you want emails to be sent. False prints to stdout.
+    @Resource(lookup="longminder/emailEnabled")
+    private boolean emailEnabled;
+    
     /**
      * Default constructor.
      */
@@ -92,20 +96,25 @@ public class EmailManagerBean implements EmailManager {
             }
             final String key = u.getLogin().getLoginkey();
 
+            String message = "You can't receive Longminder email notifications before you have confirmed your email address. Please do this by clicking the following link: \n\n"
+                    + serverBase
+                    + "/verify.xhtml?key="
+                    + key
+                    + "\n\n"
+                    + "If you haven't requested this confirmation, please ignore this email.";
+
+            if (! emailEnabled) {
+                System.out.println(message);
+                return true;
+            }
+        
             final Message msg = new MimeMessage(mailSession);
             msg.setFrom(new InternetAddress("noreply@example.com"));
             msg.setRecipient(Message.RecipientType.TO,
                     new InternetAddress(u.getEmail()));
 
             msg.setSubject("Please confirm your email address for Longminder");
-            msg.setContent(
-                    "You can't receive Longminder email notifications before you have confirmed your email address. Please do this by clicking the following link: \n\n"
-                            + serverBase
-                            + "/verify.xhtml?key="
-                            + key
-                            + "\n\n"
-                            + "If you haven't requested this confirmation, please ignore this email.",
-                    "text/plain");
+            msg.setContent(message, "text/plain");
             msg.setSentDate(new Date());
 
             Transport.send(msg);
@@ -126,20 +135,18 @@ public class EmailManagerBean implements EmailManager {
         System.out.println(serverBase);
         System.out.println("Send emails!");
         final List<User> users = um.getVerifiedUsers();
-
+        
         for (final User u : users) {
             sendAlertEmail(u);
         }
 
-        if (serverBase != null) {
-            final List<EmailRequest> requests = em.createQuery(
-                    "SELECT r FROM EmailRequest r", EmailRequest.class)
-                    .getResultList();
+        final List<EmailRequest> requests = em.createQuery(
+                "SELECT r FROM EmailRequest r", EmailRequest.class)
+                .getResultList();
 
-            for (final EmailRequest e : requests) {
-                sendVerificationEmail(e.getOwner().getEmail());
-                em.remove(e);
-            }
+        for (final EmailRequest e : requests) {
+            sendVerificationEmail(e.getOwner().getEmail());
+            em.remove(e);
         }
     }
 
@@ -152,7 +159,7 @@ public class EmailManagerBean implements EmailManager {
                 return;
             }
 
-            if (serverBase == null) {
+            if (!emailEnabled) {
                 System.out.println(alertString);
 
                 final Calendar alertCal = Calendar.getInstance();
