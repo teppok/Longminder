@@ -15,17 +15,17 @@ xmlns:f="http://java.sun.com/jsf/core">
 <h:form>
 	<h:panelGrid columns="2">
 		<h:outputLabel value="#{bundle.email}" for="email" />
-		<h:inputText id="email" value="#{newUser.email}" required="true" requiredMessage="#{bundle['required.email']}">
+		<h:inputText id="email" size="30" value="#{newUser.email}" required="true" requiredMessage="#{bundle['required.email']}">
 			<f:validateRegex pattern="^([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)$" />
 		</h:inputText>
 		<h:outputLabel value="#{bundle.first}" for="first" />
-		<h:inputText id="first" value="#{newUser.first}" required="true" requiredMessage="#{bundle['required.first']}" />
+		<h:inputText id="first" size="30" value="#{newUser.first}" required="true" requiredMessage="#{bundle['required.first']}" />
 		<h:outputLabel value="#{bundle.last}" for="last"/>
-		<h:inputText id="last" value="#{newUser.last}" required="true" requiredMessage="#{bundle['required.last']}" />
+		<h:inputText id="last" size="30" value="#{newUser.last}" required="true" requiredMessage="#{bundle['required.last']}" />
 		<h:outputLabel value="#{bundle.password}" for="password1" />
-		<h:inputSecret id="password1" value="#{newUser.password1}"  required="true" requiredMessage="#{bundle['required.password1']}" />
+		<h:inputSecret id="password1" size="30" value="#{newUser.password1}"  required="true" requiredMessage="#{bundle['required.password1']}" />
 		<h:outputLabel value="#{bundle.passwordagain}" for="password2" />
-		<h:inputSecret id="password2" value="#{newUser.password2}" required="true" requiredMessage="#{bundle['required.password2']}" />
+		<h:inputSecret id="password2" size="30" value="#{newUser.password2}" required="true" requiredMessage="#{bundle['required.password2']}" />
 		<h:commandButton action="#{newUser.register}" value="#{bundle['login.register']}" />
 	</h:panelGrid>
 </h:form>
