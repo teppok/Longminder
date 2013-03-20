@@ -38,6 +38,7 @@ xmlns:f="http://java.sun.com/jsf/core">
 <h:outputLabel value="#{bundle['newpasswordagain']}"></h:outputLabel>
 <h:inputSecret value="#{modifyUser.password2}" />
 </h:panelGrid>
+<h:outputLabel value="#{modifyUser.verified?bundle['yes']:bundle['no']}" /><br />
 <h:commandButton action="#{modifyUser.modify}" value="#{bundle['modify']}" /><br />
 <h:outputText value="(#{bundle['profile.nb1']})" /><br />
 <h:outputText value="(#{bundle['profile.nb2']})" /><br />
