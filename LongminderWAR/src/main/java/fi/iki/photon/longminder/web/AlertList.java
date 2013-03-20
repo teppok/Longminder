@@ -31,12 +31,10 @@ public class AlertList {
      */
 
     public void initialize() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            final HttpServletRequest req = (HttpServletRequest) FacesContext
-                    .getCurrentInstance().getExternalContext().getRequest();
-            if (req != null) {
-                setAlerts(ams.getAlertsForList(req));
-            }
+        final HttpServletRequest req = (HttpServletRequest) FacesContext
+                .getCurrentInstance().getExternalContext().getRequest();
+        if (req != null) {
+            setAlerts(ams.getAlertsForList(req));
         }
     }
 
