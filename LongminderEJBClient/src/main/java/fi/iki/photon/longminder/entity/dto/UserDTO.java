@@ -123,7 +123,6 @@ public class UserDTO {
     }
 
     public void setVerified(final boolean verified) {
-        System.out.println("Setverified " + verified);
         this.verified = verified;
     }
 

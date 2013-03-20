@@ -244,4 +244,15 @@ public class UserManagerService {
         return emm.requestVerificationEmail(req.getRemoteUser());
     }
 
+    public boolean isVerified(final HttpServletRequest req) {
+        final UserDTO tmpUser = new UserDTO();
+        try {
+            um.fill(req.getRemoteUser(), tmpUser);
+        } catch (LongminderException e) {
+            // In case of failure, we probably aren't verified.
+            return false;
+        }
+        return tmpUser.isVerified();
+    }
+
 }

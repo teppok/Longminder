@@ -295,7 +295,7 @@ public class UserManagerBean implements UserManager {
                     throw new LongminderException("Email already exists.");
                 }
                 if (!verifyPassword(u, ud.getOldPassword())) {
-                    throw new LongminderException("Password mismatch.");
+                    throw new LongminderException("Password required when changing email.");
                 }
             }
         }

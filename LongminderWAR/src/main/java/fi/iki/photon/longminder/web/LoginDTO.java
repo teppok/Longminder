@@ -34,7 +34,7 @@ public class LoginDTO {
 
     private String email;
     private String password;
-    private boolean verified;
+    private Boolean verified;
     private boolean authorized;
 
     /**
@@ -120,7 +120,7 @@ public class LoginDTO {
         final String key = req.getParameter("key");
         if (key != null) {
             try {
-                verified = ums.verify(key);
+                verified = new Boolean(ums.verify(key));
             } catch (LongminderException e) {
                 // Ignore exceptions.
             }
@@ -182,7 +182,13 @@ public class LoginDTO {
     }
 
     public boolean isVerified() {
-        return verified;
+        if (verified == null) {
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final HttpServletRequest req = (HttpServletRequest) context
+                    .getExternalContext().getRequest();
+            verified = new Boolean(ums.isVerified(req));
+        }
+        return verified.booleanValue();
     }
 
     public void setVerified(final boolean verified) {
