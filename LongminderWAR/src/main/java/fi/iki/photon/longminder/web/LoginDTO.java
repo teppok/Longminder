@@ -188,11 +188,12 @@ public class LoginDTO {
                     .getExternalContext().getRequest();
             verified = new Boolean(ums.isVerified(req));
         }
+        System.out.println("Isverified " + verified);
         return verified.booleanValue();
     }
 
     public void setVerified(final boolean verified) {
-        this.verified = verified;
+        this.verified = new Boolean(verified);
     }
 
     public boolean isAuthorized() {
