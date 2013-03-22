@@ -35,7 +35,7 @@ xmlns:h="http://java.sun.com/jsf/html">
 </h:panelGroup>
 
 <h:panelGroup layout="block" class="lightbox">
-<h:outputText value="Repeat based on " /><br />
+<h:outputText value="#{bundle['alert.repeatbased']}" /><br />
 <h:selectOneRadio id="repeatType" required="true" value="#{cc.attrs.alertTarget.repeatType}" onchange="changeRepeat();">
 	<f:selectItem itemValue="0" itemLabel="#{bundle['alert.norepeat']}" />
 	<f:selectItem itemValue="1" itemLabel="#{bundle['alert.dayrepeat']}" />
