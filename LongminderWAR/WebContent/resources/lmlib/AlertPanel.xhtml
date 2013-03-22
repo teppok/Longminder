@@ -62,7 +62,7 @@ xmlns:h="http://java.sun.com/jsf/html">
 	<f:selectItem itemValue="6" itemLabel="#{bundle['alert.sun']}" />
 </h:selectOneMenu>
 </h:panelGrid>
-<h:outputText value="(#{bundle['alert.nbweek']})" />
+<h:outputText value="(#{bundle['alert.nbweek']}: #{bundle[language.firstDayOfWeek()]})" />
 </div>
 
 <div id="repeat_common" style='display: ${(cc.attrs.alertTarget.repeatType > 0)?"block":"none"};'>

@@ -1,6 +1,7 @@
 package fi.iki.photon.longminder.web;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Locale;
 
 import javax.ejb.EJB;
@@ -39,7 +40,14 @@ public class Language implements Serializable {
       }
 
     public synchronized String getLocale() {
-        if (locale != null) return locale.toLanguageTag();
+        Locale result = getLocaleObject();
+        if (result == null) return null;
+        
+        return result.toLanguageTag();
+    }
+
+    public synchronized Locale getLocaleObject() {
+        if (locale != null) return locale;
 
         final FacesContext context = FacesContext.getCurrentInstance();
         final HttpServletRequest req = (HttpServletRequest) context
@@ -47,9 +55,9 @@ public class Language implements Serializable {
         
         locale = ums.getLocale(req);
         
-        return locale.toLanguageTag();
+        return locale;
     }
-
+    
     private void saveLocale() {
         final FacesContext context = FacesContext.getCurrentInstance();
         final HttpServletRequest req = (HttpServletRequest) context
@@ -60,5 +68,18 @@ public class Language implements Serializable {
     
     public synchronized String changeLanguage() {
         return null;
+    }
+    
+    public String firstDayOfWeek() {
+        Calendar c = Calendar.getInstance(locale);
+        switch (c.getFirstDayOfWeek()) {
+        case Calendar.MONDAY: return "alert.mon";
+        case Calendar.TUESDAY: return "alert.tue";
+        case Calendar.WEDNESDAY: return "alert.wed";
+        case Calendar.THURSDAY: return "alert.thu";
+        case Calendar.FRIDAY: return "alert.fri";
+        case Calendar.SATURDAY: return "alert.sat";
+        }
+        return "alert.sun";
     }
 }
