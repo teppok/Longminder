@@ -17,24 +17,44 @@ xmlns:f="http://java.sun.com/jsf/core">
 		<f:event listener="#{modifyAlert.initialize}" type="preRenderView" />
 	</f:metadata>
 <script>
-	function changeRepeat() {
-		
-		if (document.getElementById("panel:myform:repeatType:0").checked) {
-			document.getElementById('repeat_common').style.display = 'none';
-			document.getElementById('repeat1').style.display = 'none';
-			document.getElementById('repeat2').style.display = 'none';
-		}
-		if (document.getElementById("panel:myform:repeatType:1").checked) {
-			document.getElementById('repeat_common').style.display = 'block';
-			document.getElementById('repeat1').style.display = 'block';
-			document.getElementById('repeat2').style.display = 'none';
-		}
-		if (document.getElementById("panel:myform:repeatType:2").checked) {
-			document.getElementById('repeat_common').style.display = 'block';
-			document.getElementById('repeat1').style.display = 'none';
-			document.getElementById('repeat2').style.display = 'block';
-		}
+function changeRepeat() {
+	
+	if (document.getElementById("panel:myform:repeatType:0").checked) {
+		document.getElementById('repeat_common').style.display = 'none';
+		document.getElementById('repeat1').style.display = 'none';
+		document.getElementById('repeat2').style.display = 'none';
+		document.getElementById('repeat3').style.display = 'none';
+		document.getElementById('repeat4').style.display = 'none';
 	}
+	if (document.getElementById("panel:myform:repeatType:1").checked) {
+		document.getElementById('repeat_common').style.display = 'block';
+		document.getElementById('repeat1').style.display = 'block';
+		document.getElementById('repeat2').style.display = 'none';
+		document.getElementById('repeat3').style.display = 'none';
+		document.getElementById('repeat4').style.display = 'none';
+	}
+	if (document.getElementById("panel:myform:repeatType:2").checked) {
+		document.getElementById('repeat_common').style.display = 'block';
+		document.getElementById('repeat1').style.display = 'none';
+		document.getElementById('repeat2').style.display = 'block';
+		document.getElementById('repeat3').style.display = 'none';
+		document.getElementById('repeat4').style.display = 'none';
+	}
+	if (document.getElementById("panel:myform:repeatType:3").checked) {
+		document.getElementById('repeat_common').style.display = 'block';
+		document.getElementById('repeat1').style.display = 'none';
+		document.getElementById('repeat2').style.display = 'none';
+		document.getElementById('repeat3').style.display = 'block';
+		document.getElementById('repeat4').style.display = 'none';
+	}
+	if (document.getElementById("panel:myform:repeatType:4").checked) {
+		document.getElementById('repeat_common').style.display = 'block';
+		document.getElementById('repeat1').style.display = 'none';
+		document.getElementById('repeat2').style.display = 'none';
+		document.getElementById('repeat3').style.display = 'none';
+		document.getElementById('repeat4').style.display = 'block';
+	}
+}
 </script>
 </ui:define>
 

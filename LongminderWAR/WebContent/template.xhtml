@@ -26,7 +26,8 @@ xmlns:f="http://java.sun.com/jsf/core">
 		<div class="loginarea">
 			<h:form>
 			<h:selectOneMenu id="dropdown" value="#{language.locale}" onchange="this.form.submit();">
-                      <f:selectItem itemValue="en" itemLabel="English" />
+                      <f:selectItem itemValue="en-GB" itemLabel="English (GB)" />
+                      <f:selectItem itemValue="en-US" itemLabel="English (US)" />
                       <f:selectItem itemValue="fi" itemLabel="Finnish" />
             </h:selectOneMenu>
 				<h:panelGroup rendered="#{loginDTO.authorized}">

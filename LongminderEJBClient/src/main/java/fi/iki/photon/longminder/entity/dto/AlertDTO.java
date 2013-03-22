@@ -18,6 +18,8 @@ public class AlertDTO {
     public static final int REPEAT_NO = 0;
     public static final int REPEAT_DAY = 1;
     public static final int REPEAT_WEEK = 2;
+    public static final int REPEAT_MONTH = 3;
+    public static final int REPEAT_YEAR = 4;
 
     private int id;
     private String description;
@@ -33,6 +35,10 @@ public class AlertDTO {
     private int dayDelay;
     private int weekDelay;
     private int alertWeekDay;
+    private int monthDelay;
+    private int alertMonthDay;
+    private int yearDelay;
+    private int alertYearDay;
 
     /**
      * A constructor initializing some default values.
@@ -42,6 +48,11 @@ public class AlertDTO {
         oneOff = true;
         dayDelay = 1;
         weekDelay = 1;
+        monthDelay = 1;
+        alertMonthDay = 1;
+        yearDelay = 1;
+        alertYearDay = 1;
+        
     }
 
     /**
@@ -186,5 +197,37 @@ public class AlertDTO {
 
     public void setFired(final boolean fired) {
         this.fired = fired;
+    }
+
+    public int getMonthDelay() {
+        return monthDelay;
+    }
+
+    public void setMonthDelay(int monthDelay) {
+        this.monthDelay = monthDelay;
+    }
+
+    public int getAlertMonthDay() {
+        return alertMonthDay;
+    }
+
+    public void setAlertMonthDay(int alertMonthDay) {
+        this.alertMonthDay = alertMonthDay;
+    }
+
+    public int getYearDelay() {
+        return yearDelay;
+    }
+
+    public void setYearDelay(int yearDelay) {
+        this.yearDelay = yearDelay;
+    }
+
+    public int getAlertYearDay() {
+        return alertYearDay;
+    }
+
+    public void setAlertYearDay(int alertYearDay) {
+        this.alertYearDay = alertYearDay;
     }
 }

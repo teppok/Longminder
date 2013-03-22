@@ -14,13 +14,13 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
  * to set and read.
  * 
  * 
- * @author Teppo Kankaanpï¿½ï¿½
+ * @author Teppo Kankaanpää
  * 
  */
 
 @ManagedBean
 @RequestScoped
-public class ModifyAlert extends AlertDTO {
+public class ModifyAlert extends WebAlertDTO {
 
     @EJB
     private AlertManagerService ams;
@@ -53,8 +53,8 @@ public class ModifyAlert extends AlertDTO {
         final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
 
-        // TODO Validate input!
-
+        if (! validate()) return null;
+        
         final boolean result = ams.modify(req, this);
 
         if (result) {

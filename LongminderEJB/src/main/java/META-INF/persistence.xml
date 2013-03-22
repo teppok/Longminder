@@ -7,6 +7,8 @@
 		<class>fi.iki.photon.longminder.entity.Repeat</class>
 		<class>fi.iki.photon.longminder.entity.DayRepeat</class>
 		<class>fi.iki.photon.longminder.entity.WeekRepeat</class>
+		<class>fi.iki.photon.longminder.entity.MonthRepeat</class>
+		<class>fi.iki.photon.longminder.entity.YearRepeat</class>
 		<class>fi.iki.photon.longminder.entity.LoginData</class>
 		<class>fi.iki.photon.longminder.entity.EmailRequest</class>
 	    <properties>

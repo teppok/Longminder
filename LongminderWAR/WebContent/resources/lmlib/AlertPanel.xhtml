@@ -35,10 +35,13 @@ xmlns:h="http://java.sun.com/jsf/html">
 </h:panelGroup>
 
 <h:panelGroup layout="block" class="lightbox">
+<h:outputText value="Repeat based on " /><br />
 <h:selectOneRadio id="repeatType" required="true" value="#{cc.attrs.alertTarget.repeatType}" onchange="changeRepeat();">
 	<f:selectItem itemValue="0" itemLabel="#{bundle['alert.norepeat']}" />
 	<f:selectItem itemValue="1" itemLabel="#{bundle['alert.dayrepeat']}" />
 	<f:selectItem itemValue="2" itemLabel="#{bundle['alert.weekrepeat']}" />
+	<f:selectItem itemValue="3" itemLabel="#{bundle['alert.monthrepeat']}" />
+	<f:selectItem itemValue="4" itemLabel="#{bundle['alert.yearrepeat']}" />
 </h:selectOneRadio>
 
 <div id="repeat1" style='display: ${(cc.attrs.alertTarget.repeatType == 1)?"block":"none"};'>
@@ -47,6 +50,7 @@ xmlns:h="http://java.sun.com/jsf/html">
 <h:inputText value="#{cc.attrs.alertTarget.dayDelay}" />
 </h:panelGrid>
 </div>
+
 <div id="repeat2" style='display: ${(cc.attrs.alertTarget.repeatType == 2)?"block":"none"};'>
 <h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
 <h:outputLabel value="#{bundle['alert.weekdelay']}" />
@@ -63,6 +67,24 @@ xmlns:h="http://java.sun.com/jsf/html">
 </h:selectOneMenu>
 </h:panelGrid>
 <h:outputText value="(#{bundle['alert.nbweek']}: #{bundle[language.firstDayOfWeek()]})" />
+</div>
+
+<div id="repeat3" style='display: ${(cc.attrs.alertTarget.repeatType == 3)?"block":"none"};'>
+<h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
+<h:outputLabel value="#{bundle['alert.monthdelay']}" />
+<h:inputText value="#{cc.attrs.alertTarget.monthDelay}" />
+<h:outputLabel value="#{bundle['alert.monthday']}" />
+<h:inputText value="#{cc.attrs.alertTarget.alertMonthDay}" />
+</h:panelGrid>
+</div>
+
+<div id="repeat4" style='display: ${(cc.attrs.alertTarget.repeatType == 4)?"block":"none"};'>
+<h:panelGrid columns="2" columnClasses="leftcolumn, rightcolumn">
+<h:outputLabel value="#{bundle['alert.yeardelay']}" />
+<h:inputText value="#{cc.attrs.alertTarget.yearDelay}" />
+<h:outputLabel value="#{bundle['alert.yearday']}" />
+<h:inputText value="#{cc.attrs.alertTarget.alertYearDay}" />
+</h:panelGrid>
 </div>
 
 <div id="repeat_common" style='display: ${(cc.attrs.alertTarget.repeatType > 0)?"block":"none"};'>

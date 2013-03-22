@@ -99,6 +99,14 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
             final WeekRepeat wrep = new WeekRepeat(dto);
             setRepeat(wrep);
         }
+        if (dto.getRepeatType() == AlertDTO.REPEAT_MONTH) {
+            final MonthRepeat wrep = new MonthRepeat(dto);
+            setRepeat(wrep);
+        }
+        if (dto.getRepeatType() == AlertDTO.REPEAT_YEAR) {
+            final YearRepeat wrep = new YearRepeat(dto);
+            setRepeat(wrep);
+        }
     }
 
     /**
