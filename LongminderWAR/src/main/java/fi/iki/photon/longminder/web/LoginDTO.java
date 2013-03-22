@@ -6,9 +6,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import fi.iki.photon.longminder.LongminderException;
@@ -37,6 +39,9 @@ public class LoginDTO {
     private Boolean verified;
     private boolean authorized;
 
+    @ManagedProperty(value="#{language}")
+    private Language lang;
+    
     /**
      * Checks the HttpServletRequest. If it contains a temporary login key,
      * calls UserManagerService to log in with that key. If Servlet login
@@ -48,6 +53,7 @@ public class LoginDTO {
     @PostConstruct
     public void initLogin() {
         System.out.println("Init login!");
+        System.out.println(getLang());
         final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
 
@@ -146,6 +152,8 @@ public class LoginDTO {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         }
+        
+        getLang().setLocale(null);
 
         return "mainpage";
     }
@@ -161,6 +169,9 @@ public class LoginDTO {
         final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
         ums.logout(req);
+        
+        getLang().setLocale(null);
+        
         return "login";
     }
 
@@ -202,6 +213,14 @@ public class LoginDTO {
 
     public void setAuthorized(final boolean authorized) {
         this.authorized = authorized;
+    }
+
+    public Language getLang() {
+        return lang;
+    }
+
+    public void setLang(Language lang) {
+        this.lang = lang;
     }
 
 }

@@ -315,6 +315,10 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
     public Locale getLocaleObject() {
         return Locale.forLanguageTag(locale);
     }
+
+    public void setLocaleObject(Locale locale) {
+        this.locale = locale.toLanguageTag();
+    }
     
     public void setLocale(final String locale) {
         this.locale = locale;

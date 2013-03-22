@@ -1,5 +1,7 @@
 package fi.iki.photon.longminder;
 
+import java.util.Locale;
+
 import javax.ejb.Local;
 
 import fi.iki.photon.longminder.entity.dto.UserDTO;
@@ -21,4 +23,8 @@ public interface UserManager {
     public void updateUser(String email, UserDTO u) throws LongminderException;
 
     public void fill(String email, UserDTO u) throws LongminderException;
+    
+    public void setLocale(String email, Locale locale);
+    
+    public Locale getLocale(String email);
 }

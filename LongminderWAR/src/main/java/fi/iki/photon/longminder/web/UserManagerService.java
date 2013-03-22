@@ -256,4 +256,17 @@ public class UserManagerService {
         return tmpUser.isVerified();
     }
 
+    public void setLocale(final HttpServletRequest req, Locale locale) {
+        if (req.getRemoteUser() != null) {
+            um.setLocale(req.getRemoteUser(), locale);
+        }
+    }
+    
+    public Locale getLocale(final HttpServletRequest req) {
+        if (req.getRemoteUser() != null) {
+            return um.getLocale(req.getRemoteUser());
+        }
+        return Locale.getDefault();
+    }
+    
 }

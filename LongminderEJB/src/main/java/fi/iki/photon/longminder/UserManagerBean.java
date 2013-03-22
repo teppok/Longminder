@@ -3,6 +3,7 @@ package fi.iki.photon.longminder;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -331,5 +332,24 @@ public class UserManagerBean implements UserManager {
         if (u != null) {
             u.initializeDTO(ud);
         }
+    }
+    
+    @Override
+    public void setLocale(final String email, final Locale locale) {
+        final User u = findTrueUserForEmail(email);
+
+        if (u != null) {
+            u.setLocaleObject(locale);
+        }
+    }
+
+    @Override
+    public Locale getLocale(String email) {
+        final User u = findTrueUserForEmail(email);
+
+        if (u != null) {
+            return u.getLocaleObject();
+        }
+        return null;
     }
 }
