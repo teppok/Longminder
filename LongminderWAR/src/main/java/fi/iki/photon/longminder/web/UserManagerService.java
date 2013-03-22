@@ -2,6 +2,7 @@ package fi.iki.photon.longminder.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -99,7 +100,7 @@ public class UserManagerService {
         ud.setGroups(groups);
 
         if (ud.getLocale() == null) {
-            ud.setLocale("en-US");
+            ud.setLocale(Locale.forLanguageTag("en_US"));
         }
 
         System.out.println("Ok this far");

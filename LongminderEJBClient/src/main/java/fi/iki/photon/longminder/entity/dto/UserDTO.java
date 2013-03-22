@@ -1,6 +1,7 @@
 package fi.iki.photon.longminder.entity.dto;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Data transfer object for transferring data between web and EJB backends.
@@ -25,7 +26,7 @@ public class UserDTO {
     private String last;
     private String email;
     private String salt;
-    private String locale;
+    private Locale locale;
 
     private boolean verified;
 
@@ -145,11 +146,11 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getLocale() {
+    public Locale getLocale() {
         return locale;
     }
 
-    public void setLocale(final String locale) {
+    public void setLocale(final Locale locale) {
         this.locale = locale;
     }
 }

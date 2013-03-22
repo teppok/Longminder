@@ -109,7 +109,7 @@ public class AlertManagerBean implements AlertManager {
 
             if (a.getNextAlert() == null) {
                 if (a.getRepeat() != null) {
-                    a.setNextAlert(a.getRepeat().nextAlert(new Date()));
+                    a.setNextAlert(a.getRepeat().nextAlert(new Date(), u.getLocaleObject()));
                 } else {
                     return false;
                 }
@@ -120,11 +120,15 @@ public class AlertManagerBean implements AlertManager {
         return false;
     }
 
+    /*
+     * Not used anymore. Was used for debugging alert rotation.
+     * 
     public void rotateAlert(final String email, final int id) {
         final Alert a = findTrueAlert(email, id);
         a.rotateAlert();
     }
-
+*/
+    
     /** Given an id, returns an AlertDTO object with this Id. */
 
     @Override

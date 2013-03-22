@@ -3,6 +3,7 @@ package fi.iki.photon.longminder.entity;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -63,8 +64,8 @@ public class DayRepeat extends Repeat implements Serializable {
      */
 
     @Override
-    public Date nextAlert(final Date fromDate) {
-        final Calendar alertCal = Calendar.getInstance();
+    public Date nextAlert(final Date fromDate, Locale locale) {
+        final Calendar alertCal = Calendar.getInstance(locale);
         alertCal.setTime(fromDate);
         alertCal.add(Calendar.DAY_OF_MONTH, dayDelay);
         return alertCal.getTime();

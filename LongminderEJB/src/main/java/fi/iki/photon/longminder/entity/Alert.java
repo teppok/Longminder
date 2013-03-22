@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -130,11 +131,11 @@ public class Alert extends fi.iki.photon.utils.Entity implements Serializable {
      * @return The newly created alert.
      */
 
-    public Alert rotateAlert() {
+    public Alert rotateAlert(Locale locale) {
 
         final Repeat r = getRepeat();
         if (r != null) {
-            final Date nextRepeat = getRepeat().nextAlert(getNextAlert());
+            final Date nextRepeat = getRepeat().nextAlert(getNextAlert(), locale);
             if (r.isRepeatsLeft(nextRepeat)) {
                 final Alert newAlert = new Alert();
                 newAlert.setDescription(getDescription());

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -156,7 +157,7 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         }
 
         if (ud.getLocale() != null) {
-            setLocale(ud.getLocale());
+            setLocale(ud.getLocale().toLanguageTag());
         }
     }
 
@@ -177,7 +178,7 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         ud.setEmail(getEmail());
         ud.setSalt(getSalt());
         ud.setVerified(isVerified());
-        ud.setLocale(getLocale());
+        ud.setLocale(getLocaleObject());
 
         final List<String> stringGroups = new ArrayList<String>(getGroups()
                 .size());
@@ -311,6 +312,10 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         return locale;
     }
 
+    public Locale getLocaleObject() {
+        return Locale.forLanguageTag(locale);
+    }
+    
     public void setLocale(final String locale) {
         this.locale = locale;
     }

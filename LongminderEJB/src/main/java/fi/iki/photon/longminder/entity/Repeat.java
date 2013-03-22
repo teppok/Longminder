@@ -2,6 +2,7 @@ package fi.iki.photon.longminder.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -118,6 +119,6 @@ abstract public class Repeat implements Serializable {
                 .clone());
     }
 
-    abstract public Date nextAlert(Date fromDate);
+    abstract public Date nextAlert(Date fromDate, Locale locale);
 
 }

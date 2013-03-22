@@ -201,7 +201,7 @@ public class EmailManagerBean implements EmailManager {
         boolean alertsFired = false;
 
         final ResourceBundle res = ResourceBundle
-                .getBundle("fi.iki.photon.longminder.Messages");
+                .getBundle("fi.iki.photon.longminder.Messages", u.getLocaleObject());
 
         final StringBuffer alertString = new StringBuffer();
         alertString.append(res.getString("email.greeting") + " "
@@ -228,7 +228,7 @@ public class EmailManagerBean implements EmailManager {
                             + format.format(a.getNextAlert()) + "\n");
 
                     alertsFired = true;
-                    final Alert newAlert = a.rotateAlert();
+                    final Alert newAlert = a.rotateAlert(u.getLocaleObject());
 
                     if (!a.isFired()) {
                         newAlertsEncountered = true;

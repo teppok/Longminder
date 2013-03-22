@@ -3,6 +3,7 @@ package fi.iki.photon.longminder.entity;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -67,21 +68,17 @@ public class WeekRepeat extends Repeat implements Serializable {
         this.alertWeekDay = alertWeekDay;
     }
 
-    // TODO Internationalize date calculation.
-
     @Override
-    public Date nextAlert(final Date fromDate) {
-        final Calendar alertCal = Calendar.getInstance();
+    public Date nextAlert(final Date fromDate, Locale locale) {
+        final Calendar alertCal = Calendar.getInstance(locale);
         alertCal.setTime(fromDate);
-        // Returns 1 = sunday, 7 = saturday
-        int dayOfWeek = alertCal.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == 1) {
-            dayOfWeek = 8;
-        }
-        dayOfWeek = dayOfWeek - 2;
-        // Now monday = 0, sunday = 6
-        alertCal.add(Calendar.DAY_OF_MONTH, (7 - dayOfWeek));
-        alertCal.add(Calendar.WEEK_OF_YEAR, weekDelay - 1);
+        
+//        alertCal.set(Calendar.DAY_OF_WEEK, alertCal.getFirstDayOfWeek());
+
+        int dayOfWeek = (alertCal.get(Calendar.DAY_OF_WEEK) + 7 - alertCal.getFirstDayOfWeek()) % 7;
+        alertCal.add(Calendar.DAY_OF_YEAR, -dayOfWeek);
+        
+        alertCal.add(Calendar.WEEK_OF_YEAR, weekDelay);
         alertCal.add(Calendar.DAY_OF_MONTH, alertWeekDay);
         return alertCal.getTime();
     }
