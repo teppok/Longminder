@@ -128,12 +128,14 @@ public class EmailManagerBean implements EmailManager {
 
     /**
      * Sends emails for all users in the database whose email has been verified.
+     * 
+     * The scheduling subsystem seems to prevent multiple simultaneous calls to the
+     * scheduled method, so we won't run into problems with lots of users and emails to
+     * be sent.
      */
 
     @Schedule(minute = "*", hour = "*")
     public void sendEmails() {
-        System.out.println(serverBase);
-        System.out.println("Send emails!");
         final List<User> users = um.getVerifiedUsers();
         
         for (final User u : users) {
@@ -199,7 +201,7 @@ public class EmailManagerBean implements EmailManager {
         }
 
         boolean alertsFired = false;
-
+        
         final ResourceBundle res = ResourceBundle
                 .getBundle("fi.iki.photon.longminder.Messages", u.getLocaleObject());
 
