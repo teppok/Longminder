@@ -1,7 +1,5 @@
 package fi.iki.photon.longminder.web;
 
-import java.util.Locale;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -10,7 +8,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import fi.iki.photon.longminder.LongminderException;
@@ -126,7 +123,7 @@ public class LoginDTO {
         final String key = req.getParameter("key");
         if (key != null) {
             try {
-                verified = new Boolean(ums.verify(key));
+                setVerified(Boolean.valueOf(ums.verify(key)));
             } catch (LongminderException e) {
                 // Ignore exceptions.
             }
@@ -176,51 +173,59 @@ public class LoginDTO {
     }
 
 
-    public String getEmail() {
+    public synchronized String getEmail() {
         return email;
     }
 
-    public void setEmail(final String email) {
+    public synchronized void setEmail(final String email) {
         this.email = email;
     }
 
-    public String getPassword() {
+    public synchronized String getPassword() {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public synchronized void setPassword(final String password) {
         this.password = password;
     }
 
     public boolean isVerified() {
-        if (verified == null) {
+        if (getVerified() == null) {
             final FacesContext context = FacesContext.getCurrentInstance();
             final HttpServletRequest req = (HttpServletRequest) context
                     .getExternalContext().getRequest();
-            verified = new Boolean(ums.isVerified(req));
+            setVerified(Boolean.valueOf(ums.isVerified(req)));
         }
-        System.out.println("Isverified " + verified);
-        return verified.booleanValue();
+        System.out.println("Isverified " + getVerified());
+        return getVerified().booleanValue();
     }
 
-    public void setVerified(final boolean verified) {
-        this.verified = new Boolean(verified);
+    public synchronized void setVerified(final boolean verified) {
+        this.verified = Boolean.valueOf(verified);
     }
 
-    public boolean isAuthorized() {
+    public synchronized boolean isAuthorized() {
         return authorized;
     }
 
-    public void setAuthorized(final boolean authorized) {
+    public synchronized void setAuthorized(final boolean authorized) {
         this.authorized = authorized;
     }
 
-    public Language getLang() {
+    public synchronized Language getLang() {
         return lang;
     }
 
-    public void setLang(Language lang) {
+    public synchronized void setLang(Language lang) {
         this.lang = lang;
+    }
+
+    public synchronized Boolean getVerified() {
+        return verified;
+    }
+
+    public synchronized void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 
 }
