@@ -19,7 +19,8 @@
 
 	<application>
  	<locale-config>
-			<default-locale>en</default-locale>
+			<default-locale>en_GB</default-locale>
+			<supported-locale>en_US</supported-locale>
 			<supported-locale>fi</supported-locale>
 		</locale-config>
 		<resource-bundle>
