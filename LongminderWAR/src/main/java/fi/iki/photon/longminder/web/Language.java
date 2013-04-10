@@ -6,8 +6,6 @@ import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -20,15 +18,23 @@ public class Language implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private UserManagerService ums;
+    transient private UserManagerService ums;
     
     private Locale locale = null; // = 
 
     public Language() {
         System.out.println("Language created!");
     }
+
+    /**
+     * Sets the Locale field to correspond the String representation of a locale.
+     * 
+     * @param locale1
+     */
+
     
-    public void setLocale(String locale1) {
+    
+    public synchronized void setLocale(String locale1) {
         System.out.println("Locale SET " + locale1);
         
         if (locale1 == null) {
@@ -37,15 +43,30 @@ public class Language implements Serializable {
         }
         this.locale = Locale.forLanguageTag(locale1);
         saveLocale();
-      }
+    }
+    /**
+     * Returns the string representation of the Locale field.
+     * 
+     * @return String representation of the locale.
+     */
 
     public synchronized String getLocale() {
         Locale result = getLocaleObject();
         if (result == null) return null;
+
+        System.out.println("Got locale " + result.toLanguageTag());
         
         return result.toLanguageTag();
     }
 
+    /**
+     * If the Locale field is null, initializes its value by asking UserManagerService
+     * (which initializes it based on the account, or returns the default locale).
+     * 
+     * In any case, returns the Locale field value.
+     * @return Locale object.
+     */
+    
     public synchronized Locale getLocaleObject() {
         if (locale != null) return locale;
 
@@ -57,6 +78,11 @@ public class Language implements Serializable {
         
         return locale;
     }
+
+    /**
+     * Saves the current locale value to the database for the logged in
+     * user.
+     */
     
     private void saveLocale() {
         final FacesContext context = FacesContext.getCurrentInstance();
@@ -66,7 +92,7 @@ public class Language implements Serializable {
         ums.setLocale(req, locale);
     }
     
-    public synchronized String changeLanguage() {
+    public static String changeLanguage() {
         return null;
     }
     
@@ -79,7 +105,7 @@ public class Language implements Serializable {
         case Calendar.THURSDAY: return "alert.thu";
         case Calendar.FRIDAY: return "alert.fri";
         case Calendar.SATURDAY: return "alert.sat";
+        default: return "alert.sun";
         }
-        return "alert.sun";
     }
 }
