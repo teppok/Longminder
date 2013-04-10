@@ -7,6 +7,7 @@ import java.util.Locale;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -266,7 +267,11 @@ public class UserManagerService {
         if (req.getRemoteUser() != null) {
             return um.getLocale(req.getRemoteUser());
         }
-        return Locale.getDefault();
+        FacesContext context = FacesContext.getCurrentInstance();
+        Locale l = context.getApplication().getDefaultLocale();
+        System.out.println("Default locale " + l.toLanguageTag());
+        
+        return l;
     }
     
 }
