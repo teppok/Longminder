@@ -5,6 +5,14 @@ import javax.faces.context.FacesContext;
 
 import fi.iki.photon.longminder.entity.dto.AlertDTO;
 
+/**
+ * This class does Alert validation that is common to the ModifyAlert and NewAlert dialogs.
+ *  
+ * @author Teppo Kankaanp‰‰
+ *
+ */
+
+
 public class WebAlertDTO extends AlertDTO {
     
     public boolean validate() {

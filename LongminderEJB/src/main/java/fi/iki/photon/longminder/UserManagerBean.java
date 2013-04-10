@@ -251,7 +251,7 @@ public class UserManagerBean implements UserManager {
      * @return true if the password matches.
      */
 
-    private boolean verifyPassword(final User u, final String password) {
+    private static boolean verifyPassword(final User u, final String password) {
         if (u == null) {
             return false;
         }

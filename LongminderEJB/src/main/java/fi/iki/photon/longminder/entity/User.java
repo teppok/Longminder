@@ -151,6 +151,7 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         }
 
         if (ud.getGroups() != null) {
+            getGroups().clear();
             for (final String g : ud.getGroups()) {
                 addGroup(Group.valueOf(g));
             }
@@ -180,7 +181,7 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         ud.setVerified(isVerified());
         ud.setLocale(getLocaleObject());
 
-        final List<String> stringGroups = new ArrayList<String>(getGroups()
+        final List<String> stringGroups = new ArrayList<>(getGroups()
                 .size());
 
         for (final Group g : getGroups()) {
@@ -242,10 +243,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         return groups;
     }
     
-    private void setGroups(final List<Group> groups) {
-        this.groups = groups;
-    }
-
     public String getSalt() {
         return salt;
     }
@@ -254,14 +251,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
         this.salt = salt;
     }
 
-    private List<Alert> getAlerts() {
-        return alerts;
-    }
-
-    private void setAlerts(final List<Alert> alerts) {
-        this.alerts = alerts;
-    }
-    
     public void addAlert(Alert a) {
         if (alerts == null) alerts = new ArrayList<>();
         alerts.add(a);
@@ -279,14 +268,6 @@ public class User extends fi.iki.photon.utils.Entity implements Serializable {
 
     public void setVerified(final boolean verified) {
         this.verified = verified;
-    }
-    
-    private List<LoginData> getLogins() {
-        return logins;
-    }
-
-    private void setLogins(final List<LoginData> logins) {
-        this.logins = logins;
     }
     
     public LoginData getLogin() {

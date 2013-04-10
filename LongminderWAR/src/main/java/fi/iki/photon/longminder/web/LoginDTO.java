@@ -137,7 +137,7 @@ public class LoginDTO {
      * @return "mainpage" if successful, null otherwise and sets a Faces error.
      */
 
-    public String login() {
+    public synchronized String login() {
 
         final HttpServletRequest req = (HttpServletRequest) FacesContext
                 .getCurrentInstance().getExternalContext().getRequest();
@@ -165,7 +165,7 @@ public class LoginDTO {
         final FacesContext context = FacesContext.getCurrentInstance();
         final HttpServletRequest req = (HttpServletRequest) context
                 .getExternalContext().getRequest();
-        ums.logout(req);
+        UserManagerService.logout(req);
         
         getLang().setLocale(null);
         

@@ -32,7 +32,7 @@ public class JsonResponse {
     }
 
     // @XmlElement //we don't need this thanks to Jackson
-    public float getVersion() {
+    public static float getVersion() {
         return JsonResponse.version;
     }
 

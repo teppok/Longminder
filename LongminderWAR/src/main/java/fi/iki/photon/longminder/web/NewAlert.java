@@ -7,8 +7,6 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import fi.iki.photon.longminder.entity.dto.AlertDTO;
-
 /**
  * A backing bean for newalert.xhtml. Actually extends AlertDTO for ease of data
  * transfer.

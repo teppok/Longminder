@@ -8,6 +8,8 @@ public class LongminderException extends Exception {
     public LongminderException(String message) {
         this.message = message;
     }
+    
+    @Override
     public String toString() { return message; }
     
 }

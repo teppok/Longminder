@@ -7,8 +7,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpServletRequest;
 
-import fi.iki.photon.longminder.entity.dto.AlertDTO;
-
 /**
  * A backing bean for modifyalert.xhtml. Extends AlertDTO so the values are easy
  * to set and read.

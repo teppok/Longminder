@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder.entity;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -21,7 +20,7 @@ import fi.iki.photon.longminder.entity.dto.AlertDTO;
 @Entity
 @Access(AccessType.FIELD)
 @DiscriminatorValue("WEEKREPEAT")
-public class WeekRepeat extends Repeat implements Serializable {
+public class WeekRepeat extends Repeat {
 
     private static final long serialVersionUID = 1L;
 

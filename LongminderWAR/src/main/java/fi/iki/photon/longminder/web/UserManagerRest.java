@@ -38,7 +38,7 @@ public class UserManagerRest {
 
     @GET
     @Path("ping")
-    public String ping() {
+    public static String ping() {
         return "Hello";
     }
 
@@ -84,10 +84,10 @@ public class UserManagerRest {
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("logout")
-    public Response logout(@Context final HttpServletRequest req) {
+    public static Response logout(@Context final HttpServletRequest req) {
         final JsonResponse response = new JsonResponse();
 
-        ums.logout(req);
+        UserManagerService.logout(req);
 
         response.setStatus("SUCCESS");
 

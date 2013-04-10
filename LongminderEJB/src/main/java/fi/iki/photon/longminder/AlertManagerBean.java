@@ -39,7 +39,7 @@ public class AlertManagerBean implements AlertManager {
 
     /** Simple ping for testing. */
 
-    public String hello() {
+    public static String hello() {
         return "hello";
     }
 
@@ -192,7 +192,7 @@ public class AlertManagerBean implements AlertManager {
             return null;
         }
 
-        final List<AlertDTO> result = new ArrayList<AlertDTO>();
+        final List<AlertDTO> result = new ArrayList<>();
 
         for (final Alert a : listResult) {
             final AlertDTO ad = new AlertDTO();
@@ -204,7 +204,7 @@ public class AlertManagerBean implements AlertManager {
 
     @Override
     public List<AlertDTO> getAlertsForList(final String email) {
-        final List<AlertDTO> result = new ArrayList<AlertDTO>();
+        final List<AlertDTO> result = new ArrayList<>();
 
         final List<Alert> listResult = em
                 .createQuery(
@@ -227,7 +227,7 @@ public class AlertManagerBean implements AlertManager {
 
     @Override
     public List<AlertDTO> getAlertsForHistory(final String email) {
-        final List<AlertDTO> result = new ArrayList<AlertDTO>();
+        final List<AlertDTO> result = new ArrayList<>();
 
         final List<Alert> listResult = em
                 .createQuery(

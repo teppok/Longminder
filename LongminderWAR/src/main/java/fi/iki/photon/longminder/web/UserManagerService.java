@@ -96,7 +96,7 @@ public class UserManagerService {
             throw new LongminderException("User already exists.");
         }
 
-        final List<String> groups = new ArrayList<String>();
+        final List<String> groups = new ArrayList<>();
         groups.add("USER");
         ud.setGroups(groups);
 
@@ -126,7 +126,7 @@ public class UserManagerService {
      * @param req
      */
 
-    public void logout(final HttpServletRequest req) {
+    public static void logout(final HttpServletRequest req) {
         if (req.getUserPrincipal() != null) {
             try {
                 req.logout();

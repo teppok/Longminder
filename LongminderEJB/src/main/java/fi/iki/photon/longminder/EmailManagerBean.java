@@ -1,6 +1,5 @@
 package fi.iki.photon.longminder;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,8 +19,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -73,7 +70,7 @@ public class EmailManagerBean implements EmailManager {
         }
         
         // Test if we already have requested a verification.
-        final EmailRequest test = em.find(EmailRequest.class, new Integer(u.getId()));
+        final EmailRequest test = em.find(EmailRequest.class, Integer.valueOf(u.getId()));
         if (test != null) {
             return true;
         }
@@ -213,7 +210,7 @@ public class EmailManagerBean implements EmailManager {
         final DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM,
                 new Locale(u.getLocale().substring(0, 2)));
 
-        final List<Alert> newAlertList = new ArrayList<Alert>();
+        final List<Alert> newAlertList = new ArrayList<>();
 
         boolean newAlertsEncountered = false;
 
