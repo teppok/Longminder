@@ -133,19 +133,25 @@ public class EmailManagerBean implements EmailManager {
 
     @Schedule(minute = "*", hour = "*")
     public void sendEmails() {
-        final List<User> users = um.getVerifiedUsers();
-        
-        for (final User u : users) {
-            sendAlertEmail(u);
-        }
-
-        final List<EmailRequest> requests = em.createQuery(
-                "SELECT r FROM EmailRequest r", EmailRequest.class)
-                .getResultList();
-
-        for (final EmailRequest e : requests) {
-            sendVerificationEmail(e.getOwner().getEmail());
-            em.remove(e);
+        try {
+            final List<User> users = um.getVerifiedUsers();
+            
+            for (final User u : users) {
+                sendAlertEmail(u);
+            }
+    
+            final List<EmailRequest> requests = em.createQuery(
+                    "SELECT r FROM EmailRequest r", EmailRequest.class)
+                    .getResultList();
+    
+            for (final EmailRequest e : requests) {
+                sendVerificationEmail(e.getOwner().getEmail());
+                em.remove(e);
+            }
+        } catch (Exception ex) {
+            // Catch all exceptions, especially the database related ones, so that they
+            // don't stop the timer service.
+            ex.printStackTrace();
         }
     }
 
